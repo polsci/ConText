@@ -1,0 +1,469 @@
+/* This section borrows styles from Plotly Dash stylesheet  - all credit to them */
+
+html {
+  font-size: 62.5%; }
+body {
+  font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
+  line-height: 1.6;
+  font-weight: 400;
+  font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: rgb(50, 50, 50); }
+
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: 300; }
+h1 { font-size: 4.5rem; line-height: 1.2;  letter-spacing: -.1rem; margin-bottom: 2rem; }
+h2 { font-size: 3.6rem; line-height: 1.25; letter-spacing: -.1rem; margin-bottom: 1.8rem; margin-top: 1.8rem;}
+h3 { font-size: 3.0rem; line-height: 1.3;  letter-spacing: -.1rem; margin-bottom: 1.5rem; margin-top: 1.5rem;}
+h4 { font-size: 2.6rem; line-height: 1.35; letter-spacing: -.08rem; margin-bottom: 1.2rem; margin-top: 1.2rem;}
+h5 { font-size: 2.2rem; line-height: 1.5;  letter-spacing: -.05rem; margin-bottom: 0.6rem; margin-top: 0.6rem;}
+h6 { font-size: 2.0rem; line-height: 1.6;  letter-spacing: 0; margin-bottom: 0.75rem; margin-top: 0.75rem;}
+
+p {
+  margin-top: 0; }
+
+  a {
+  color: #1EAEDB; 
+  text-decoration: underline;
+  cursor: pointer;}
+a:hover {
+  color: #0FA0CE; }
+
+  .button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  color: #555;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  cursor: pointer;
+  box-sizing: border-box; }
+.button:hover,
+button:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+.button:focus,
+button:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+input[type="button"]:focus {
+  color: #333;
+  border-color: #888;
+  outline: 0; }
+.button.button-primary,
+button.button-primary,
+input[type="submit"].button-primary,
+input[type="reset"].button-primary,
+input[type="button"].button-primary {
+  color: #FFF;
+  background-color: #33C3F0;
+  border-color: #33C3F0; }
+.button.button-primary:hover,
+button.button-primary:hover,
+input[type="submit"].button-primary:hover,
+input[type="reset"].button-primary:hover,
+input[type="button"].button-primary:hover,
+.button.button-primary:focus,
+button.button-primary:focus,
+input[type="submit"].button-primary:focus,
+input[type="reset"].button-primary:focus,
+input[type="button"].button-primary:focus {
+  color: #FFF;
+  background-color: #1EAEDB;
+  border-color: #1EAEDB; }
+
+
+/* Forms
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea,
+select {
+  height: 38px;
+  padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
+  background-color: #fff;
+  border: 1px solid #D1D1D1;
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box; 
+  font-family: inherit;
+  font-size: inherit; /*https://stackoverflow.com/questions/6080413/why-doesnt-input-inherit-the-font-from-body*/}
+/* Removes awkward default styles on some inputs for iOS */
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none; }
+textarea {
+  min-height: 65px;
+  padding-top: 6px;
+  padding-bottom: 6px; }
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+  border: 1px solid #33C3F0;
+  outline: 0; }
+label,
+legend {
+  display: block;
+  margin-bottom: 0px; }
+fieldset {
+  padding: 0;
+  border-width: 0; }
+input[type="checkbox"],
+input[type="radio"] {
+  display: inline; }
+label > .label-body {
+  display: inline-block;
+  margin-left: .5rem;
+  font-weight: normal; }
+
+button,
+.button {
+  margin-bottom: 0rem; }
+input,
+textarea,
+select,
+fieldset {
+  margin-bottom: 0rem; }
+pre,
+dl,
+figure,
+table,
+form {
+  margin-bottom: 0rem; }
+p,
+ul,
+ol {
+  margin-bottom: 0.75rem; }
+
+hr {
+  margin-top: 3rem;
+  margin-bottom: 3.5rem;
+  border-width: 0;
+  border-top: 1px solid #E1E1E1; }
+
+/* End - section*/
+
+#context-left {
+width:25%;
+float:left;
+}
+
+#context-right {
+width:75%;
+float:left;
+}
+
+#context-left.text-view, #context-right.text-view {
+width:50%;
+}
+
+#context-left.text-view > h2, #context-left.text-view > table, #context-left.text-view > div {
+display:none;
+}
+
+#context-left.text-view div#text-context {
+display:block;
+margin-right:0.5em;
+}
+
+#context-left.text-view div#text-context div#text-context-view {
+overflow-y:scroll;
+height:400px;
+}
+
+#context-left.text-view iframe {
+width:100%;
+border:0px;
+height:400px;
+}
+
+#selected {
+background:yellow;
+}
+
+#context-right::after {
+content: ".";
+visibility: hidden;
+display: block;
+height: 0;
+clear: both;
+}
+
+
+#context-header {
+
+
+}
+
+#context-header::after {
+  content: "";
+  display:table;
+  clear:both;
+}
+
+#context-title {
+background:url('/static/images/logo.svg') no-repeat top left!important;
+background-size:1.15em!important;
+margin:0;
+padding-left:1.15em;
+margin-right:0.4em;
+float:left;
+cursor: pointer;
+}
+
+#context-title a {
+color:#000;
+text-decoration:none;
+}
+
+#corpus-name {
+font-weight:bold;
+}
+
+#context-corpus-detail {
+float:left;
+margin-right:1em;
+line-height:1.3;
+margin-top:0.5em;
+}
+
+#context-corpus-detail div {
+  cursor: pointer;
+}
+
+#context-search-form {
+float:left;
+width:50%;
+margin-right:-10%;
+margin-top:0.5em;
+}
+
+#form-search {
+float:left;
+width:30%;
+display:block;
+}
+
+#form-order {
+margin-left:0.5em;
+width:40%;
+float:left;
+}
+
+
+#context-main {
+margin-bottom:5em;
+}
+
+#context-full {
+clear:both;
+width:100%;
+}
+
+#context-full h2 {
+margin-top:3em;
+}
+
+#context-footer {
+position:fixed;
+left:0.5em;
+bottom:0em;
+padding-top:0.3em;
+padding-bottom:0.3em;
+right:0.5em;
+background:#fff;
+}
+
+
+#context-settings {
+position:absolute;
+top:0em;
+right:0em;
+}
+
+#settings-heading {
+  margin-top:0;
+}
+
+#settings-button {
+border:none;
+background:url('/static/images/settings-outline.svg') no-repeat top left!important;
+background-size:100% 100%!important;
+position:absolute;
+top:1em;
+right:1em;
+}
+
+button#settings-button, button#settings-close-button {
+  padding: 0!important;
+}
+
+#settings-close-button {
+border:none;
+background:url('/static/images/close-circle-outline.svg') no-repeat top left!important;
+background-size:100% 100%!important;
+position:absolute;
+top:1em;
+right:2em;
+}
+
+#context-settings-form {
+  display:none;
+  background:none;
+  position:relative;
+  border:none;
+  top:auto;
+  right:auto;
+  margin:auto;
+  height:auto;
+}
+
+#context-settings-form.show-form {
+  background:#fff;
+  display:block;
+  position:fixed;
+  border:0;
+  border-left:1px solid #ccc;
+  border-bottom:1px solid #ccc;
+  border-radius: 0 0 0 10px;
+  box-shadow: -5px 5px 10px #eee;
+  top:0em;
+  right:0em;
+  width:75%;
+  min-height:50%;
+  height:auto;
+  padding:1em 2em 2em 2em;
+}
+
+/* from earlier version - won't be necessarily - but leaving in case anything useful
+#table-ngrams {
+  margin-right:0.5em;
+}
+
+#table-concordance table {
+width:100%;
+table-layout: fixed;
+}
+
+#table-concordance td, #table-concordance th {
+white-space: nowrap;
+overflow: hidden;
+}
+
+#table-concordance .context-0, #table-concordance .context-2 {
+width:10%;
+max-width:10%;
+text-overflow:ellipsis;
+}
+
+#table-concordance .context-1, #table-concordance .context-3 {
+width:40%;
+max-width:40%;
+}
+
+#table-concordance .context-3 {
+text-overflow:ellipsis;
+}
+
+#table-concordance .context-1 {
+text-align:right!important;
+}
+
+#table-concordance .context-1 div {
+display:inline-block;
+float:right;
+text-align:right;
+white-space: nowrap;
+overflow: visible;
+width:auto;
+} 
+
+#text-todos {
+margin-top:800px;
+clear:both;
+width:100%
+}
+
+#text-todos li {
+margin-bottom:0;
+}
+
+*/
+
+
+
+.prompt-text {
+}
+
+.show {
+  display:block;
+}
+
+.hide {
+  display:none;
+}
+
+.clear-both {
+  clear:both;
+}
+
+button span {
+  color: transparent;
+  text-indent: -9999px;
+}
+
+/* Media Queries
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+/* Larger than mobile */
+@media (min-width: 400px) {}
+
+/* Larger than phablet (also point when grid becomes active) */
+@media (min-width: 550px) {}
+
+/* Larger than tablet */
+@media (min-width: 750px) {}
+
+/* Larger than desktop */
+@media (min-width: 1000px) {}
+
+/* Larger than Desktop HD */
+@media (min-width: 1200px) {}
+
+.gt_table {}
+.gt_heading {display:none;}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ConText</title>
+  <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/local.css') }}">
+  <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
+</style>
+</head>
+<body>
+    <!--
+    
+    
+    -->
+    <header id="context-header">
+        <h1 id="context-title" hx-get="/default_home" hx-target="#context-main">
+            <a href="/" hx-get="/default_home" hx-target="#context-main">ConText</a>
+        </h1>
+        <div id="context-corpus-detail" hx-trigger="load" hx-get="/detail">
+        </div>
+        <div id="context-search-form" class="">
+            <form id="search-form" hx-post="/query_context" hx-target="#context-main" hx-swap="innerHTML" hx-trigger="submit">
+                <input type="text" id="form-search" name="search" placeholder="Enter search term" required _="on load put '{{ search }}' into my value">
+                <select id="form-order" name="order" _="on change trigger submit on #search-form
+                                                           on load put '{{ order }}' into my value">
+                    <option value="1R2R3R">Order right (1R, 2R, 3R)</option>
+                    <option value="1L2L3L">Order left (1L, 2L, 3L)</option>
+                    <option value="3L2L1L">Order left (3L, 2L, 1L)</option>
+                    <option value="1L1R2R">Order around (1L, 1R, 2R)</option>
+                    <option value="2L1L1R">Order around (2L, 1L, 1R)</option>
+                </select>
+            </form>
+        </div>
+
+    </header>
+    <main id="context-main">
+        {{ context | safe }}
+    </main>
+
+    <div id="context-settings">
+        <button id="settings-button" _="on click toggle .show-form on #context-settings-form"><span>Settings</span></button>
+    </div>
+    <div id="context-settings-form">
+        <button id="settings-close-button" _="on click toggle .show-form on #context-settings-form" hx-target="#context-corpus-detail" hx-get="/detail"><span>Close</span></button>
+        <h2>Configuration</h2>
+        <label for="selected-corpus">Selected Corpus:</label>
+        <select id="selected-corpus" name="selected_corpus" hx-trigger="load, change" hx-post="/corpus_select"></select>
+            
+        </select>
+        <label for="reference-corpus">Reference Corpus:</label>
+        <select id="reference-corpus" name="reference_corpus" hx-trigger="load, change" hx-post="/reference_corpus_select">
+            
+        </select>
+    </div>
+
+    <footer id="context-footer">Ford, G. (2025). <a href="#" target="_blank">ConText</a>: a browser based concordancer and language analysis application. ConText is powered by <a href="https://geoffford.nz/conc" target="_blank">Conc</a>.</footer>
+
+</body>
+</html>
