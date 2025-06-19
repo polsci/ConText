@@ -24,3 +24,25 @@ The software prioritises speed through pre-processing via [Conc](https://github.
 * Flask
 * htmx
 * hyperscript
+
+## Installation
+
+The development environment is setup using Python 3.11. Required packages are specified in the requirements.txt file. To install, run:
+
+```bash
+pip install -r requirements.txt
+```
+
+Note: Conc requires installation of a Spacy model. For example, for English:
+
+```bash
+python -m spacy download en_core_web_sm
+```
+
+## Running the dev version
+
+To run the application in debug mode, use the following command:
+
+```bash
+flask --app context run --debug
+```
