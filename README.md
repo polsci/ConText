@@ -1,12 +1,12 @@
 # ConText
 
-A browser-based concordancer and language analysis application.
+A browser-based concordancer and language analysis application.  
 
-This repo builds on work done in 2020 on a Python library, Jupyter Notebook and Dash application for the Mapping LAWS project. This work prototyped a browser-based alternative to desktop applications for corpus analysis. Ideas for this tool originated during my PhD thesis, which developed a browser-based analysis tool around a corpus of parliamentary discourse enabling rapid queries, new forms of analysis and browseable connections between different levels of analysis. 
+This repo builds on work done in 2020 on a Python library, Jupyter Notebook and Dash application for the Mapping LAWS project. This work prototyped a browser-based alternative to desktop applications for corpus analysis. Ideas for this tool originated during my PhD thesis, which developed a browser-based analysis tool around a corpus of parliamentary discourse enabling rapid queries, new forms of analysis and browseable connections between different levels of analysis.  
 
-![Screenshot of original working Dash prototype of ConText](assets/context-dash-with-text.png)
+![Screenshot of original working Dash prototype of ConText](assets/context-dash-with-text.png)  
 
-ConText builds on [Conc](https://github.com/polsci/conc), a Python library for corpus analysis. 
+ConText builds on [Conc](https://github.com/polsci/conc), a Python library for corpus analysis.  
 
 ## Design principles
 
@@ -27,13 +27,16 @@ The software prioritises speed through pre-processing via [Conc](https://github.
 
 ## Installation
 
-The development environment is setup using Python 3.11. Required packages are specified in the requirements.txt file. To install, run:
+1. The development environment is setup using Python 3.11. Required packages are specified in the requirements.txt file. To install, run:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Note: Conc requires installation of a Spacy model. For example, for English:
+Notes: 
+- Conc installs the Polars library. On older pre-2013 machines, you will need to install Polars without optimisations for modern CPUs. Not doing this will cause Python kernel crashes. Notes on this are available in the [Conc installation documentation](https://geoffford.nz/conc/tutorials/install.html#pre-2013-cpu-install-polars-with-support-for-older-machines).  
+
+2. ConText/Conc requires installation of a Spacy model. For example, for English:  
 
 ```bash
 python -m spacy download en_core_web_sm
@@ -41,7 +44,7 @@ python -m spacy download en_core_web_sm
 
 ## Running the dev version
 
-To run the application in debug mode, use the following command:
+To run the application in debug mode, use the following command:  
 
 ```bash
 flask --app context run --debug
