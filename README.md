@@ -49,3 +49,11 @@ To run the application in debug mode, use the following command:
 ```bash
 flask --app context run --debug
 ```
+
+## Credit
+
+- Prototype styling is based on Dash stylsheet
+- Icons are via https://ionic.io/ionicons
+- logo is based on apps-outline
+
+
