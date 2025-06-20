@@ -5,16 +5,24 @@ from conc.core import set_logger_state
 from conc.result import Result
 from flask import Flask, render_template, redirect, url_for, request, make_response
 
-# TODO: paging
-# TODO: links to context
-# TODO: formatting of tables
-# TODO: handle escaping
-# TODO: set / load corpus and reference corpus
-# TODO: probably update conc to use Result object for corpus info etc
-# TODO: make corpus name at top a link to the default view
-# TODO: set defaults for various reports
-# TODO: low priority - update title on url changes
-# TODO: low priority - do loading thing - hx-indicator
+# TODO:
+# show settings on load
+# paging
+# links to context
+# formatting of tables 
+# handle escaping
+# set / load corpus and reference corpus
+# probably update conc to use Result object for corpus info etc
+# make corpus name at top a link to the default view
+# set defaults for various reports
+# low priority - update title on url changes
+# low priority - do loading thing - hx-indicator
+
+# Conc TODO:
+# conc needs to center node in concordance Result
+# needs a way to get Corpus summary as a result
+# implement summary data for Result - so can render them how i like
+# default document id as doc id in concordance results
 
 app = Flask(__name__)
 
@@ -31,9 +39,12 @@ conc = Conc(corpus)
 conc.set_reference_corpus(reference_corpus)
 #corpora.get_column('corpus').to_list()
 def _get_default_html():
-    context_left = Result('summary', corpus.info(), 'Corpus Summary', '', {}, []).to_html()
+    context_left = '<div class="context-summaries"><h2>Corpus Information</h2>'
+    context_left += Result('summary', corpus.info(), 'Corpus Summary', '', {}, []).to_html()
+    context_left += '<h2>Reference Corpus Information</h2>'
     context_left += Result('summary', reference_corpus.info(), 'Reference Corpus Summary', '', {}, []).to_html()
-    context_right = conc.keywords(min_document_frequency_reference = 5).to_html()
+    context_left += '</div>'
+    context_right = '<h2>Keywords</h2>' + conc.keywords(min_document_frequency_reference = 5, show_document_frequency = True).to_html()
     context_full = ''
     context_data_title = f'ConText'
     return render_template("context.html", 
@@ -45,8 +56,11 @@ def _get_default_html():
                                )
 
 def _get_query_html(search_string, order_string):
-    context_left = conc.ngrams(search_string).to_html()
-    context_right = conc.concordance(search_string, context_length = 20, order = order_string).to_html()
+    context_left = '<h2>Clusters</h2>' + conc.ngrams(search_string).to_html()
+    context_right = '<h2>Concordance</h2>'
+    
+    context_right += f'<button id="context-chart-button" hx-target="#context-right" hx-post="/concordanceplot/{search_string}/{order_string}"><span>Concordance Plot</span></button>'
+    context_right += conc.concordance(search_string, context_length = 20, order = order_string).to_html()
     context_full = ''
     return render_template("context.html", 
                                context_left=context_left, 
@@ -54,6 +68,11 @@ def _get_query_html(search_string, order_string):
                                context_full=context_full,
                                context_data_title=f'ConText : {search_string} ({order_string})'
                                )
+
+def _get_concordanceplot_html(search_string, order_string):
+    context = '<h2>Concordance Plot</h2>'
+    context += f'<button id="context-table-button"><span>Concordance Plot</span></button>'
+    return context
 
 
 @app.route("/")
@@ -72,7 +91,13 @@ def default_home():
     response.headers['HX-Push-Url'] = response_url
     return response
 
-@app.route("/query/<search>/<order>/")
+@app.route("/concordanceplot/<search>/<order>", methods=['POST'])
+def concordanceplot(search, order):
+    # TODO escape search and order
+    context = _get_concordanceplot_html(search, order)
+    return context
+
+@app.route("/query/<search>/<order>")
 def query(search, order):
     # TODO escape search and order
     context_html = _get_query_html(search, order)
@@ -92,7 +117,7 @@ def query_context():
 @app.route("/detail", methods=['GET'])
 def detail():
     #corpus_info = f"{corpus.word_token_count:,} word tokens ({corpus.word_token_count/1_000_000:.2f} million tokens), {corpus.document_count:,} documents loaded"
-    corpus_info = f"Word tokens: {corpus.word_token_count/1_000_000:.2f} million, Documents {corpus.document_count:,} documents loaded"
+    corpus_info = f"Word tokens: {corpus.word_token_count/1_000_000:.2f} million &bull; Documents: {corpus.document_count:,}"
     return render_template("detail.html", 
                            corpus_name=corpus.name, 
                            corpus_info=corpus_info)
