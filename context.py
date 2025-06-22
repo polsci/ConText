@@ -2,7 +2,6 @@ from conc.corpus import Corpus
 from conc.conc import Conc
 from conc.corpora import list_corpora
 from conc.core import set_logger_state
-from conc.result import Result
 from flask import Flask, render_template, redirect, url_for, request, make_response
 
 # TODO:
@@ -19,10 +18,8 @@ from flask import Flask, render_template, redirect, url_for, request, make_respo
 # low priority - do loading thing - hx-indicator
 
 # Conc TODO:
-# conc needs to center node in concordance Result
-# needs a way to get Corpus summary as a result
 # implement summary data for Result - so can render them how i like
-# default document id as doc id in concordance results
+# plot class that works like results
 
 app = Flask(__name__)
 
@@ -40,9 +37,9 @@ conc.set_reference_corpus(reference_corpus)
 #corpora.get_column('corpus').to_list()
 def _get_default_html():
     context_left = '<div class="context-summaries"><h2>Corpus Information</h2>'
-    context_left += Result('summary', corpus.info(), 'Corpus Summary', '', {}, []).to_html()
+    context_left += corpus.report().to_html()
     context_left += '<h2>Reference Corpus Information</h2>'
-    context_left += Result('summary', reference_corpus.info(), 'Reference Corpus Summary', '', {}, []).to_html()
+    context_left += reference_corpus().report().to_html()
     context_left += '</div>'
     context_right = '<h2>Keywords</h2>' + conc.keywords(min_document_frequency_reference = 5, show_document_frequency = True).to_html()
     context_full = ''
