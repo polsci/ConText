@@ -18,7 +18,7 @@
         <h1 id="context-title" hx-get="/default_home" hx-target="#context-main">
             <a href="/" hx-get="/default_home" hx-target="#context-main">ConText</a>
         </h1>
-        <div id="context-corpus-detail" hx-trigger="load" hx-get="/detail">
+        <div id="context-corpus-detail" hx-trigger="newCorpus from:body" hx-get="/detail">
         </div>
         <div id="context-search-form" class="">
             <form id="search-form" hx-post="/query_context" hx-target="#context-main" hx-swap="innerHTML" hx-trigger="submit">
@@ -43,14 +43,14 @@
         <button id="settings-button" _="on click toggle .show-form on #context-settings-form"><span>Settings</span></button>
     </div>
     <div id="context-settings-form">
-        <button id="settings-close-button" _="on click toggle .show-form on #context-settings-form" hx-target="#context-corpus-detail" hx-get="/detail"><span>Close</span></button>
+        <button id="settings-close-button" _="on click toggle .show-form on #context-settings-form" hx-target="#context-main" hx-get="/default_home"><span>Close</span></button>
         <h2>Configuration</h2>
         <label for="selected-corpus">Selected Corpus:</label>
         <select id="selected-corpus" name="selected_corpus" hx-trigger="load, change" hx-post="/corpus_select"></select>
             
         </select>
         <label for="reference-corpus">Reference Corpus:</label>
-        <select id="reference-corpus" name="reference_corpus" hx-trigger="load, change" hx-post="/reference_corpus_select">
+        <select id="reference-corpus" name="selected_reference_corpus" hx-trigger="load, change" hx-post="/reference_corpus_select">
             
         </select>
     </div>

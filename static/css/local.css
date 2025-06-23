@@ -194,8 +194,9 @@ float:left;
 }
 
 #context-right {
-width:calc(75% - 0.5em);
+width:calc(75% - 1em);
 float:left;
+margin-left:0.5em;
 margin-right:0.5em;
 }
 
@@ -340,7 +341,7 @@ top:1em;
 right:1em;
 }
 
-#context-chart-button, #context-table-button {
+#context-chart-button, #context-table-button, #context-options-button {
 border:none;
 background:url('/static/images/easel-outline.svg') no-repeat top left!important;
 background-size:100% 100%!important;
@@ -355,6 +356,16 @@ width:3.5em;
 background:url('/static/images/list-outline.svg') no-repeat top left!important;
 }
 
+#context-options-button {
+background:url('/static/images/options-outline.svg') no-repeat top left!important;
+}
+
+#context-right-nav {
+  position:absolute;
+  right:1.5em;
+  top:6em;
+  width:max-content;
+}
 
 button {
   padding: 0!important;
@@ -524,6 +535,10 @@ tr > .gt_row.gt_left {
 .gt_table > .gt_table_body {
   border-bottom-color:#000!important;
 }
+
+.conc-plot-wrapper h2, .conc-plot-wrapper h3 {
+  display: none;
+} 
 
 /*  */
 
