@@ -3,6 +3,7 @@ from conc.conc import Conc
 from conc.corpora import list_corpora
 from conc.core import set_logger_state
 from flask import Flask, render_template, redirect, url_for, request, make_response
+import polars as pl
 
 # TODO:
 # show settings on load if not set
@@ -30,13 +31,12 @@ reference_corpus = Corpus().load(f'{save_path}brown.corpus')
 conc = Conc(corpus)
 
 conc.set_reference_corpus(reference_corpus)
-#corpora.get_column('corpus').to_list()
 
 def _get_default():
     return render_template("context-default.html")
 
 def _get_query(search, order):
-    return render_template("context-query.html", concordance_url = url_for('concordance', search=search, order=order), clusters_url = url_for('clusters', search=search, order=order))
+    return render_template("context-query.html", search_url = url_for('form_search', search = search), concordance_url = url_for('concordance', search=search, order=order), clusters_url = url_for('clusters', search=search, order=order))
 
 def _get_query_html(search_string, order_string):
     context_left = '<h2>Clusters</h2>' + conc.ngrams(search_string, ngram_length = None).to_html() 
@@ -88,7 +88,11 @@ def collocates(search, order):
 
 @app.route('/clusters/<search>/<order>')
 def clusters(search, order):
-    return '<h2>Clusters</h2>' + conc.ngrams(search, ngram_length = None).to_html() 
+    clusters_result = conc.ngrams(search, ngram_length = None)
+    clusters_result.df = clusters_result.df.with_columns(
+        pl.concat_str(pl.lit('<span hx-target="#context-main" hx-get="/query_context/'), clusters_result.df.select(pl.col('ngram')).to_series(), pl.lit('/'), pl.lit(order), pl.lit('">'), clusters_result.df.select(pl.col('ngram')).to_series(), pl.lit('</span>')).alias('ngram'),
+    )
+    return '<h2>Clusters</h2>' + clusters_result.to_html() 
 
 @app.route('/concordance/<search>/<order>')
 def concordance(search, order):
@@ -106,15 +110,23 @@ def query(search, order):
     context_html = _get_query(search, order)
     return render_template("index.html", search = search, order=order, context=context_html)
 
+@app.route("/form_search/<search>", methods=['GET'])
+def form_search(search):
+    return render_template("form-search.html", search=search)
+
+@app.route("/query_context/<search>/<order>", methods=['GET'])
 @app.route("/query_context", methods=['POST'])
-def query_context():
-    search = request.form.get('search') # TODO escape search and order
-    order = request.form.get('order')
+def query_context(search = '', order = ''):
+    if request.method == 'POST': # TODO escape search and order
+        search = request.form.get('search')
+        order = request.form.get('order')
+    search = search.strip()
     context = _get_query(search, order)
     response = make_response(context)
     response_url = url_for('query', search=search, order=order)
     response.headers['HX-Replace-Url'] = response_url
     response.headers['HX-Push-Url'] = response_url
+    response.headers['HX-Trigger'] = 'newContext' #  hx-trigger="newContext from:body" hx-swap="outerHTML" hx-get="{{ search_url }}" hx-target="#form-search"
     return response
 
 @app.route("/detail", methods=['GET'])
@@ -124,6 +136,10 @@ def detail():
     return render_template("detail.html", 
                            corpus_name=corpus.name, 
                            corpus_info=corpus_info)
+
+@app.route("/settings", methods=['GET'])
+def settings():
+    return render_template("settings.html")
 
 @app.route("/corpus_select", methods=['POST'])
 @app.route("/reference_corpus_select", methods=['POST'])
