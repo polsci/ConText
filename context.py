@@ -17,6 +17,7 @@ import polars as pl
 # low priority - do loading thing - hx-indicator
 
 # conc result - implement summary value so can pass to context
+# document.documentElement.scrollTop = document.getElementById("selected").offsetTop-100;
 
 app = Flask(__name__)
 
@@ -29,11 +30,14 @@ global conc
 corpus = Corpus().load(f'{save_path}garden-party.corpus')
 reference_corpus = Corpus().load(f'{save_path}brown.corpus')
 conc = Conc(corpus)
-
+current_corpus_path = corpus.corpus_path
+current_reference_corpus_path = reference_corpus.corpus_path
+current_order = '1R2R3R'
 conc.set_reference_corpus(reference_corpus)
 
 def _get_default():
-    return render_template("context-default.html")
+    corpus_info = render_template("corpus-info.html", title = 'Corpus Information', table = corpus.report().to_html())
+    return render_template("context-default.html", slug = corpus.slug, corpus_info = corpus_info)
 
 def _get_query(search, order):
     return render_template("context-query.html", search_url = url_for('form_search', search = search), concordance_url = url_for('concordance', search=search, order=order), clusters_url = url_for('clusters', search=search, order=order))
@@ -65,7 +69,7 @@ def home():
     context = _get_default()
     return render_template("index.html", search = search_string, order=order_string, context=context)
 
-@app.route("/default_home")
+@app.route("/default-home", methods=['POST'])
 def default_home():
     context = _get_default()
     response_url = url_for('home')
@@ -75,12 +79,32 @@ def default_home():
     return response
 
 @app.route('/corpus-info', methods=['POST'])
-def corpus_info():
+def corpus_info_redirect():
+    global corpus
+    return redirect(url_for('corpus_info', corpus_slug=corpus.slug))
+
+@app.route('/corpus-info/<corpus_slug>')
+def corpus_info(corpus_slug):
     return render_template("corpus-info.html", title = 'Corpus Information', table = corpus.report().to_html())
 
-@app.route('/keywords')
-def keywords():
-    return '<h2>Keywords</h2>' + conc.keywords(min_document_frequency_reference = 5, show_document_frequency = True).to_html()
+@app.route('/keywords', methods=['POST'])
+def keywords_redirect():
+    global corpus
+    return redirect(url_for('keywords', corpus_slug=corpus.slug))
+
+@app.route('/keywords/<corpus_slug>')
+def keywords(corpus_slug):
+    result = conc.keywords(min_document_frequency_reference = 5, show_document_frequency = True)
+    result.df = result.df.with_columns(
+        pl.concat_str(pl.lit('<span class="context-clickable" hx-target="#context-main" hx-get="/query-context/'), result.df.select(pl.col('token')).to_series(), pl.lit('/'), pl.lit(current_order), pl.lit('">'), result.df.select(pl.col('token')).to_series(), pl.lit('</span>')).alias('token'),
+    )
+    return '<h2>Keywords</h2>' + result.to_html()
+
+
+@app.route('/text/<doc_id>/<index>')
+def text(doc_id, index):
+    result = corpus.text(int(doc_id)).as_string()
+    return '<div class="context-text-wrapper"><h2>Text</h2><div class="context-text">' + result + '</div></div>'
 
 @app.route('/collocates/<search>/<order>')
 def collocates(search, order):
@@ -90,13 +114,18 @@ def collocates(search, order):
 def clusters(search, order):
     clusters_result = conc.ngrams(search, ngram_length = None)
     clusters_result.df = clusters_result.df.with_columns(
-        pl.concat_str(pl.lit('<span hx-target="#context-main" hx-get="/query_context/'), clusters_result.df.select(pl.col('ngram')).to_series(), pl.lit('/'), pl.lit(order), pl.lit('">'), clusters_result.df.select(pl.col('ngram')).to_series(), pl.lit('</span>')).alias('ngram'),
+        pl.concat_str(pl.lit('<span class="context-clickable" hx-target="#context-main" hx-get="/query-context/'), clusters_result.df.select(pl.col('ngram')).to_series(), pl.lit('/'), pl.lit(order), pl.lit('">'), clusters_result.df.select(pl.col('ngram')).to_series(), pl.lit('</span>')).alias('ngram'),
     )
     return '<h2>Clusters</h2>' + clusters_result.to_html() 
 
 @app.route('/concordance/<search>/<order>')
 def concordance(search, order):
-    return '<h2>Concordance</h2>' + f'<nav id="context-right-nav"><button id="context-chart-button" hx-target="#context-right" hx-get="/concordanceplot/{search}/{order}"><span>Concordance Plot</span></button><button id="context-options-button"><span>Options</span></button></nav>' + conc.concordance(search, context_length = 20, order = order).to_html()
+    result = conc.concordance(search, context_length = 20, order = order, show_all_columns = True)
+    result.df = result.df.with_columns(
+        pl.concat_str(pl.lit('<span class="context-clickable" hx-target="#context-left" hx-get="/text/'), result.df.select(pl.col('doc_id')).to_series(), pl.lit('/'), result.df.select(pl.col('index')).to_series(), pl.lit('">'), result.df.select(pl.col('node')).to_series(), pl.lit('</span>')).alias('node'),
+    )
+    result.df = result.df[['doc_id', 'left', 'node', 'right']]
+    return '<h2>Concordance</h2>' + f'<nav id="context-right-nav"><button id="context-chart-button" hx-target="#context-right" hx-get="/concordanceplot/{search}/{order}"><span>Concordance Plot</span></button><button id="context-options-button"><span>Options</span></button></nav>' + result.to_html()
 
 @app.route("/concordanceplot/<search>/<order>")
 def concordanceplot(search, order):
@@ -107,19 +136,28 @@ def concordanceplot(search, order):
 @app.route("/query/<search>/<order>")
 def query(search, order):
     # TODO escape search and order
+    global current_order
+    current_order = order
     context_html = _get_query(search, order)
     return render_template("index.html", search = search, order=order, context=context_html)
 
-@app.route("/form_search/<search>", methods=['GET'])
+@app.route("/form-search/<search>", methods=['GET'])
 def form_search(search):
     return render_template("form-search.html", search=search)
 
-@app.route("/query_context/<search>/<order>", methods=['GET'])
-@app.route("/query_context", methods=['POST'])
-def query_context(search = '', order = ''):
-    if request.method == 'POST': # TODO escape search and order
-        search = request.form.get('search')
-        order = request.form.get('order')
+@app.route("/query-context", methods=['POST'])
+def query_context_redirect(): # TODO escape search and order
+    search = request.form.get('search')
+    order = request.form.get('order')
+    if not search:
+        return redirect(url_for('default_home'))
+    else:
+        return redirect(url_for('query_context', search=search, order=order))
+
+@app.route("/query-context/<search>/<order>", methods=['GET'])
+def query_context(search, order): # TODO escape search and order
+    global current_order
+    current_order = order
     search = search.strip()
     context = _get_query(search, order)
     response = make_response(context)
@@ -129,49 +167,69 @@ def query_context(search = '', order = ''):
     response.headers['HX-Trigger'] = 'newContext' #  hx-trigger="newContext from:body" hx-swap="outerHTML" hx-get="{{ search_url }}" hx-target="#form-search"
     return response
 
-@app.route("/detail", methods=['GET'])
-def detail():
+@app.route("/detail", methods=['POST'])
+def detail_redirect():
+    global corpus
+    return redirect(url_for('detail', corpus_slug=corpus.slug))
+
+@app.route("/detail/<corpus_slug>", methods=['GET'])
+def detail(corpus_slug):
     #corpus_info = f"{corpus.word_token_count:,} word tokens ({corpus.word_token_count/1_000_000:.2f} million tokens), {corpus.document_count:,} documents loaded"
     corpus_info = f"Word tokens: {corpus.word_token_count/1_000_000:.2f} million &bull; Documents: {corpus.document_count:,}"
     return render_template("detail.html", 
                            corpus_name=corpus.name, 
                            corpus_info=corpus_info)
 
+@app.route("/new-corpus", methods=['POST'])
+def new_corpus():
+    context = ''
+    response = make_response(context)
+    response.headers['HX-Trigger'] = 'newCorpus'
+    return response
+
 @app.route("/settings", methods=['GET'])
 def settings():
     return render_template("settings.html")
 
-@app.route("/corpus_select", methods=['POST'])
-@app.route("/reference_corpus_select", methods=['POST'])
+@app.route("/corpus-select", methods=['POST'])
+@app.route("/reference-corpus-select", methods=['POST'])
 def corpus_select():
     global corpus
     global reference_corpus
     global conc
+    global current_corpus_path
+    global current_reference_corpus_path
 
     corpora = list_corpora(save_path)
     corpus_filenames = corpora.get_column('corpus').to_list()
     corpus_names = corpora.get_column('name').to_list()
-    if request.url_rule.rule == '/corpus_select':
+    trigger_new_corpus = False
+    if request.url_rule.rule == '/corpus-select':
         if 'selected_corpus' in request.form:
             corpus_filename = request.form.get('selected_corpus')
-            if corpus_filename and corpus_filename in corpus_filenames:
+            if corpus_filename and corpus_filename in corpus_filenames and corpus_filename != current_corpus_path:
                 corpus = Corpus().load(f'{save_path}{corpus_filename}')
                 conc = Conc(corpus)
                 conc.set_reference_corpus(reference_corpus) # if new conc created, need to reset reference corpus
-    if request.url_rule.rule == '/reference_corpus_select':
+                current_corpus_path = corpus.corpus_path
+                trigger_new_corpus = True
+    if request.url_rule.rule == '/reference-corpus-select':
         if 'selected_reference_corpus' in request.form:
             reference_corpus_filename = request.form.get('selected_reference_corpus')
-            if reference_corpus_filename and reference_corpus_filename in corpus_filenames:
+            if reference_corpus_filename and reference_corpus_filename in corpus_filenames and reference_corpus_filename != current_reference_corpus_path:
                 reference_corpus = Corpus().load(f'{save_path}{reference_corpus_filename}')
                 conc.set_reference_corpus(reference_corpus)
+                current_reference_corpus_path = reference_corpus.corpus_path
+                trigger_new_corpus = True
     options = []
     for corpus_filename, corpus_name in zip(corpus_filenames, corpus_names):
-        if request.url_rule.rule == '/corpus_select' and corpus_name == corpus.name:
+        if request.url_rule.rule == '/corpus-select' and corpus_name == corpus.name:
             options.append(f'<option value="{corpus_filename}" selected>{corpus_name}</option>')
-        elif request.url_rule.rule == '/reference_corpus_select' and corpus_name == reference_corpus.name:
+        elif request.url_rule.rule == '/reference-corpus-select' and corpus_name == reference_corpus.name:
             options.append(f'<option value="{corpus_filename}" selected>{corpus_name}</option>')
         else:
             options.append(f'<option value="{corpus_filename}">{corpus_name}</option>')
     response = make_response('\n'.join(options))
-    response.headers['HX-Trigger'] = 'newCorpus'
+    if trigger_new_corpus:
+        response.headers['HX-Trigger'] = 'newCorpus'
     return response

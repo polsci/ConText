@@ -1,6 +1,6 @@
-        <div id="context-left" hx-trigger="load" hx-post="/corpus-info" hx-swap="outerHTML">
-        </div>
-        <div id="context-right" hx-trigger="load" hx-get="/keywords">
+        {{ corpus_info | safe }}
+
+        <div id="context-right" hx-trigger="load" hx-get="/keywords/{{ slug }}">
         </div>
         <div id="context-full">
         </div>

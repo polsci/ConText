@@ -11,18 +11,18 @@
 </head>
 <body>
     <!--
-    
+    _="on load put '{{ search }}' into my value"
     
     -->
     <header id="context-header">
-        <h1 id="context-title" hx-get="/default_home" hx-target="#context-main">
-            <a href="/" hx-get="/default_home" hx-target="#context-main">ConText</a>
+        <h1 id="context-title" hx-post="/default-home" hx-target="#context-main">
+            <a href="/" hx-post="/default-home" hx-target="#context-main">ConText</a>
         </h1>
-        <div id="context-corpus-detail" hx-trigger="newCorpus from:body" hx-get="/detail">
+        <div id="context-corpus-detail" hx-trigger="newCorpus from:body" hx-post="/detail">
         </div>
         <div id="context-search-form" class="">
-            <form id="search-form" hx-post="/query_context" hx-target="#context-main" hx-swap="innerHTML" hx-trigger="submit">
-                <input type="text" id="form-search" name="search" placeholder="Enter search term" required _="on load put '{{ search }}' into my value">
+            <form id="search-form" hx-post="/query-context" hx-target="#context-main" hx-swap="innerHTML" hx-trigger="submit">
+                <input type="text" id="form-search" name="search" placeholder="Enter search term" required>
                 <select id="form-order" name="order" _="on change trigger submit on #search-form
                                                            on load put '{{ order }}' into my value">
                     <option value="1R2R3R">Order right (1R, 2R, 3R)</option>
@@ -44,8 +44,28 @@
     </div>
     <div id="context-settings-form">
     </div>
+    <div id="context-runner" hx-trigger="load" hx-post="/new-corpus"></div>
 
     <footer id="context-footer">Ford, G. (2025). <a href="#" target="_blank">ConText</a>: a browser based concordancer and language analysis application. ConText is powered by <a href="https://geoffford.nz/conc" target="_blank">Conc</a>.</footer>
+
+    <script type="text/hyperscript">
+    on popstate or load or htmx:pushedIntoHistory
+        set path to window.location.pathname
+        set segments to path.split("/")
+        if segments.length > 2
+            set rawValue to segments[2]
+            set decodedValue to [decodeURIComponent(rawValue)]
+            put decodedValue into #form-search.value
+        else
+            put "" into #form-search.value
+        end
+    end
+
+    on keydown from document
+        if event.key is "F2"
+            halt the event
+            call #form-search.focus()
+    </script>
 
 </body>
 </html>

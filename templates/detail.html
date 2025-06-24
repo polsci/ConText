@@ -1,3 +1,3 @@
 
-<div id="corpus-name" hx-get="/default_home" hx-target="#context-main">{{ corpus_name }}</div>
-<div id="corpus-info" hx-get="/default_home" hx-target="#context-main">{{ corpus_info | safe }}</div>
+<div id="corpus-name" hx-post="/default-home" hx-target="#context-main">{{ corpus_name }}</div>
+<div id="corpus-info" hx-post="/default-home" hx-target="#context-main">{{ corpus_info | safe }}</div>

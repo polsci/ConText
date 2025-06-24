@@ -1,9 +1,9 @@
-        <button id="settings-close-button" _="on click toggle .show-form on #context-settings-form" hx-target="#context-main" hx-get="/default_home"><span>Close</span></button>
+        <button id="settings-close-button" _="on click toggle .show-form on #context-settings-form" hx-target="#context-main" hx-post="/default-home"><span>Close</span></button>
         <h2>Configuration</h2>
         <label for="selected-corpus">Selected Corpus:</label>
-        <select id="selected-corpus" name="selected_corpus" hx-trigger="load, change" hx-post="/corpus_select"></select>
+        <select id="selected-corpus" name="selected_corpus" hx-trigger="load, change" hx-post="/corpus-select"></select>
             
         </select>
         <label for="reference-corpus">Reference Corpus:</label>
-        <select id="reference-corpus" name="selected_reference_corpus" hx-trigger="load, change" hx-post="/reference_corpus_select">
+        <select id="reference-corpus" name="selected_reference_corpus" hx-trigger="load, change" hx-post="/reference-corpus-select">
         </select>

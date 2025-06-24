@@ -540,6 +540,40 @@ tr > .gt_row.gt_left {
   display: none;
 } 
 
+.context-corpus-info .gt_table {
+  border-bottom-width:1px!important;  
+}
+
+.context-corpus-info .gt_table > thead > .gt_col_headings {
+  display:none;
+}
+
+.context-corpus-info .gt_table > tbody {
+  border-top-color:#000!important;
+  border-top-width:1px!important;
+  border-bottom-width:1px!important;
+}
+
+
+.context-clickable {
+  text-decoration: dotted underline;
+  cursor: pointer;
+}
+
+.context-clickable:hover {
+  text-decoration: underline;
+  color: #1EAEDB;
+}
+
+
+.context-text-wrapper .context-text  {
+overflow-y:scroll;
+height:calc(100vh - 10em);
+white-space: pre-wrap; font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+font-size:1.2em;
+}
+
+
 /*  */
 
 /*  */
