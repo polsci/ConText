@@ -56,4 +56,24 @@ flask --app context run --debug
 - Icons are via https://ionic.io/ionicons
 - logo is based on apps-outline
 
+## TODO:
 
+- [ ] menu for individual panes system
+- [ ] ngram position changes when order changes
+- [ ] paging
+- [ ] conc - skip punctuation option in concordances
+- [ ] links in collocation report --> conc: contextual restriction for concordances
+- [ ] show settings on load if corpus not set - ideally load dir
+- [ ] set good defaults for various reports
+- [ ] handle escaping
+- [ ] check various inputs - 'mr.'
+
+### Low priority (after release)
+
+- json settings file for context to preserve state between loads
+- update html title on url changes
+- loading indicator via hx-indicator
+- record session in a json file per session
+- tooltips for buttons and other functionality
+- preferences (e.g. when expand reference corpus - remember that across session and store in json)
+- highlighty interface

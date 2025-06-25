@@ -1,0 +1,9 @@
+<div class="context-text-wrapper use-headless-tables">
+    {{ nav | safe }}
+    <h2>{{ title }}</h2>
+    <div id="context-text-metadata" class="context-text-metadata">{{ metadata | safe }}</div>
+    <div id="context-text" class="context-text" _="on load set #context-text-metadata.style.marginBottom to (-1 * #context-text-metadata.offsetHeight) + 'px'
+                                then set #context-text-spacer.style.height to #context-text-metadata.offsetHeight + 'px'
+                                then go to the middle of .highlight smoothly end                            
+                                "><div id="context-text-spacer"></div>{{ result | safe }}</div>
+</div>

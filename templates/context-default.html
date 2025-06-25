@@ -1,7 +1,7 @@
         {{ corpus_info | safe }}
 
-        <div id="context-right" hx-trigger="load" hx-get="/keywords/{{ slug }}">
+        <div id="context-right" hx-trigger="load" hx-get="/keywords/{{ corpus_slug }}/{{ reference_corpus_slug }}">
         </div>
-        <div id="context-full">
+        <div id="context-full" class="hide">
         </div>
         <div id="context-data-title" data-title=""></div>

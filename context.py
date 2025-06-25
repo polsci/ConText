@@ -5,17 +5,6 @@ from conc.core import set_logger_state
 from flask import Flask, render_template, redirect, url_for, request, make_response
 import polars as pl
 
-# TODO:
-# show settings on load if not set
-# paging
-# links to context
-# formatting of tables 
-# handle escaping
-# set / load corpus and reference corpus
-# set defaults for various reports
-# low priority - update title on url changes
-# low priority - do loading thing - hx-indicator
-
 # conc result - implement summary value so can pass to context
 # document.documentElement.scrollTop = document.getElementById("selected").offsetTop-100;
 
@@ -27,7 +16,7 @@ global corpus
 global reference_corpus
 global conc
 
-corpus = Corpus().load(f'{save_path}garden-party.corpus')
+corpus = Corpus().load(f'{save_path}reuters.corpus')
 reference_corpus = Corpus().load(f'{save_path}brown.corpus')
 conc = Conc(corpus)
 current_corpus_path = corpus.corpus_path
@@ -36,8 +25,8 @@ current_order = '1R2R3R'
 conc.set_reference_corpus(reference_corpus)
 
 def _get_default():
-    corpus_info = render_template("corpus-info.html", title = 'Corpus Information', table = corpus.report().to_html())
-    return render_template("context-default.html", slug = corpus.slug, corpus_info = corpus_info)
+    corpus_info = render_template("corpus-info.html", title = 'Corpus Information', table = corpus.report().to_html(), reference_corpus_title = 'Reference Corpus', reference_corpus_table = reference_corpus.report().to_html())
+    return render_template("context-default.html", corpus_slug = corpus.slug, reference_corpus_slug = reference_corpus.slug, corpus_info = corpus_info)
 
 def _get_query(search, order):
     return render_template("context-query.html", search_url = url_for('form_search', search = search), concordance_url = url_for('concordance', search=search, order=order), clusters_url = url_for('clusters', search=search, order=order))
@@ -57,8 +46,9 @@ def _get_query_html(search_string, order_string):
                                )
 
 def _get_concordanceplot_html(search, order):
-    context = '<h2>Concordance Plot</h2>'
-    context += f'<nav id="context-right-nav"><button id="context-table-button" hx-target="#context-right" hx-get="/concordance/{search}/{order}"><span>Concordance</span></button><button id="context-options-button"><span>Options</span></button></nav>'
+    context = f'<nav id="context-right-nav"><button class="context-options-button" _="on click toggle .show-form on #context-settings-form" hx-get="/concordanceplot-settings" hx-target="#context-settings-form"><span>Options</span></button></nav>'
+    context += '<h2>Concordance Plot</h2>'
+    #<button id="context-table-button" hx-target="#context-right" hx-get="/concordance/{search}/{order}"><span>Concordance</span></button>
     context += conc.concordance_plot(search).to_html()
     return context
 
@@ -81,34 +71,41 @@ def default_home():
 @app.route('/corpus-info', methods=['POST'])
 def corpus_info_redirect():
     global corpus
-    return redirect(url_for('corpus_info', corpus_slug=corpus.slug))
+    return redirect(url_for('corpus_info', corpus_slug=corpus.slug, reference_corpus_slug=reference_corpus.slug))
 
-@app.route('/corpus-info/<corpus_slug>')
-def corpus_info(corpus_slug):
-    return render_template("corpus-info.html", title = 'Corpus Information', table = corpus.report().to_html())
+@app.route('/corpus-info/<corpus_slug>/<reference_corpus_slug>')
+def corpus_info(corpus_slug, reference_corpus_slug):
+    return render_template("corpus-info.html", title = 'Corpus Information', table = corpus.report().to_html(), reference_corpus_title = 'Reference Corpus', reference_corpus_table = reference_corpus.report().to_html())
 
 @app.route('/keywords', methods=['POST'])
 def keywords_redirect():
     global corpus
-    return redirect(url_for('keywords', corpus_slug=corpus.slug))
+    return redirect(url_for('keywords', corpus_slug=corpus.slug, reference_corpus_slug=reference_corpus.slug))
 
-@app.route('/keywords/<corpus_slug>')
-def keywords(corpus_slug):
+@app.route('/keywords/<corpus_slug>/<reference_corpus_slug>')
+def keywords(corpus_slug, reference_corpus_slug):
     result = conc.keywords(min_document_frequency_reference = 5, show_document_frequency = True)
     result.df = result.df.with_columns(
         pl.concat_str(pl.lit('<span class="context-clickable" hx-target="#context-main" hx-get="/query-context/'), result.df.select(pl.col('token')).to_series(), pl.lit('/'), pl.lit(current_order), pl.lit('">'), result.df.select(pl.col('token')).to_series(), pl.lit('</span>')).alias('token'),
     )
-    return '<h2>Keywords</h2>' + result.to_html()
+    context = f'<nav id="context-right-nav"><button class="context-options-button" _="on click toggle .show-form on #context-settings-form" hx-get="/keywords-settings" hx-target="#context-settings-form"><span>Options</span></button></nav>'
+    context += '<h2>Keywords</h2>'
+    return context + result.to_html()
 
 
-@app.route('/text/<doc_id>/<index>')
-def text(doc_id, index):
-    result = corpus.text(int(doc_id)).as_string()
-    return '<div class="context-text-wrapper"><h2>Text</h2><div class="context-text">' + result + '</div></div>'
+@app.route('/text/<doc_id>/<start_index>/<end_index>')
+def text(doc_id, start_index, end_index):
+    doc = corpus.text(int(doc_id))
+    result = doc.as_string(highlighted_token_range = (int(start_index), int(end_index)))
+    metadata = doc.get_metadata().to_html()
+    nav = f'<nav id="context-left-nav" _="on click toggle .show-form on #context-settings-form" hx-get="/text-settings" hx-target="#context-settings-form"><button class="context-options-button"><span>Options</span></button></nav>'
+    return render_template("text.html", title = 'Text', result = result, metadata = metadata, nav = nav)
 
 @app.route('/collocates/<search>/<order>')
 def collocates(search, order):
-    return '<h2>Collocates</h2>' + conc.collocates(search).to_html() 
+    context = f'<nav id="context-left-nav" _="on click toggle .show-form on #context-settings-form" hx-get="/collocates-settings" hx-target="#context-settings-form"><button class="context-options-button"><span>Options</span></button></nav>'
+    context += '<h2>Collocates</h2>'
+    return context + conc.collocates(search).to_html() 
 
 @app.route('/clusters/<search>/<order>')
 def clusters(search, order):
@@ -116,16 +113,23 @@ def clusters(search, order):
     clusters_result.df = clusters_result.df.with_columns(
         pl.concat_str(pl.lit('<span class="context-clickable" hx-target="#context-main" hx-get="/query-context/'), clusters_result.df.select(pl.col('ngram')).to_series(), pl.lit('/'), pl.lit(order), pl.lit('">'), clusters_result.df.select(pl.col('ngram')).to_series(), pl.lit('</span>')).alias('ngram'),
     )
-    return '<h2>Clusters</h2>' + clusters_result.to_html() 
+    context = f'<nav id="context-left-nav" _="on click toggle .show-form on #context-settings-form" hx-get="/clusters-settings" hx-target="#context-settings-form"><button class="context-options-button"><span>Options</span></button></nav>'
+    context += '<h2>Clusters</h2>'
+    return context + clusters_result.to_html() 
 
 @app.route('/concordance/<search>/<order>')
 def concordance(search, order):
+    token_sequence, index_id = corpus.tokenize(search, simple_indexing=True)
+    sequence_len = len(token_sequence[0])
     result = conc.concordance(search, context_length = 20, order = order, show_all_columns = True)
+    if result.df.is_empty():
+        return f'<h2>No concordance results {search}</h2>'
     result.df = result.df.with_columns(
-        pl.concat_str(pl.lit('<span class="context-clickable" hx-target="#context-left" hx-get="/text/'), result.df.select(pl.col('doc_id')).to_series(), pl.lit('/'), result.df.select(pl.col('index')).to_series(), pl.lit('">'), result.df.select(pl.col('node')).to_series(), pl.lit('</span>')).alias('node'),
+        pl.concat_str(pl.lit('<span class="context-clickable" hx-target="#context-left" hx-get="/text/'), result.df.select(pl.col('doc_id')).to_series(), pl.lit('/'), result.df.select(pl.col('index')).to_series(), pl.lit('/'), result.df.select(pl.col('index')).to_series() + pl.lit(sequence_len-1), pl.lit('">'), result.df.select(pl.col('node')).to_series(), pl.lit('</span>')).alias('node'),
     )
     result.df = result.df[['doc_id', 'left', 'node', 'right']]
-    return '<h2>Concordance</h2>' + f'<nav id="context-right-nav"><button id="context-chart-button" hx-target="#context-right" hx-get="/concordanceplot/{search}/{order}"><span>Concordance Plot</span></button><button id="context-options-button"><span>Options</span></button></nav>' + result.to_html()
+    # <button id="context-chart-button" hx-target="#context-right" hx-get="/concordanceplot/{search}/{order}"><span>Concordance Plot</span></button>
+    return f'<nav id="context-right-nav"><button class="context-options-button" _="on click toggle .show-form on #context-settings-form" hx-get="/concordance-settings" hx-target="#context-settings-form"><span>Options</span></button></nav>' + '<h2>Concordance</h2>' + result.to_html()
 
 @app.route("/concordanceplot/<search>/<order>")
 def concordanceplot(search, order):

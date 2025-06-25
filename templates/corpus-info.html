@@ -1,4 +1,11 @@
-        <div id="context-left" class="context-corpus-info" hx-trigger="newCorpus from:body" hx-post="/corpus-info" hx-swap="outerHTML">
+        <div id="context-left" class="use-headless-tables" hx-trigger="newCorpus from:body" hx-post="/corpus-info" hx-swap="outerHTML">
             <h2>{{ title }}</h2>
             {{ table | safe }}
+
+            <div id="context-reference-corpus-info">
+                <h4>{{ reference_corpus_title }}</h3>
+                {{ reference_corpus_table | safe }}
+                <button id="expand-table-button" _="on click toggle .expand on #context-reference-corpus-info
+                                                on click toggle .expand on me"><span>Expand</span></button>
+            </div>
         </div>
