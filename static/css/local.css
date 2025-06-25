@@ -226,7 +226,7 @@ height:400px;
 }
 
 #selected, .highlight {
-background:yellow;
+background:#FCFFC0;
 }
 
 #context-right::after {
@@ -343,7 +343,7 @@ right:1.4em;
 width:3.5em;
 }
 
-#context-chart-button, #context-table-button, .context-options-button, #expand-table-button {
+.context-button {
 border:none;
 background:url('/static/images/easel-outline.svg') no-repeat top left!important;
 background-size:100% 100%!important;
@@ -373,7 +373,37 @@ width:100%;
 margin-bottom:1.5em;
 }
 
-#context-left-nav, #context-right-nav {
+.context-reports-button {
+background:url('/static/images/albums-outline.svg') no-repeat top left!important;
+}
+
+.reports-nav {
+  position:absolute;
+  left:-150px;
+  top:-10px;
+  background:#fff;
+  border-top:1px solid #eee;
+  border-right:1px solid #eee;
+  border-left:1px solid #ccc;
+  border-bottom:1px solid #ccc;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: -5px 5px 10px #eee;  
+  list-style-type:none;
+  padding:1em;
+  display:none;
+  z-index:2;
+}
+
+.context-reports-button:hover + .reports-nav {
+display:block!important;
+}
+
+.reports-nav:hover {
+display:block;
+}
+
+
+.context-nav {
   position:relative;
   float:right;
   width:max-content;
@@ -523,7 +553,9 @@ button span {
 .gt_table {width:100%!important;}
 .gt_heading {display:none;}
 
-
+.gt_table tbody tr:hover {
+  background:#E3F5FB;
+}
 
 tr > .gt_row.gt_left {
   vertical-align: top!important;

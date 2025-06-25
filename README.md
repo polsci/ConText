@@ -58,7 +58,6 @@ flask --app context run --debug
 
 ## TODO:
 
-- [ ] menu for individual panes system
 - [ ] ngram position changes when order changes
 - [ ] paging
 - [ ] conc - skip punctuation option in concordances
@@ -77,3 +76,4 @@ flask --app context run --debug
 - tooltips for buttons and other functionality
 - preferences (e.g. when expand reference corpus - remember that across session and store in json)
 - highlighty interface
+- add ngram frequencies
