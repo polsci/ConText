@@ -377,10 +377,31 @@ margin-bottom:1.5em;
 background:url('/static/images/albums-outline.svg') no-repeat top left!important;
 }
 
+.context-previous-button {
+background:url('/static/images/chevron-back-outline.svg') no-repeat top left!important;
+}
+
+.context-next-button {
+background:url('/static/images/chevron-forward-outline.svg') no-repeat top left!important;
+}
+
+.context-start-button {
+background:url('/static/images/chevron-start-outline.svg') no-repeat top left!important;
+}
+
+.context-end-button {
+background:url('/static/images/chevron-end-outline.svg') no-repeat top left!important;
+}
+
+.disabled {
+  cursor:auto;
+  opacity:0.25;
+}
+
 .reports-nav {
   position:absolute;
-  left:-150px;
-  top:-10px;
+  right:10px;
+  top:10px;
   background:#fff;
   border-top:1px solid #eee;
   border-right:1px solid #eee;
@@ -392,6 +413,7 @@ background:url('/static/images/albums-outline.svg') no-repeat top left!important
   padding:1em;
   display:none;
   z-index:2;
+  width:max-content;
 }
 
 .context-reports-button:hover + .reports-nav {

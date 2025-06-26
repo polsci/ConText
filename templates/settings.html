@@ -1,5 +1,5 @@
-        <button id="settings-close-button" _="on click toggle .show-form on #context-settings-form" hx-target="#context-main" hx-post="/default-home"><span>Close</span></button>
-        <h2>Configuration</h2>
+        <button id="settings-close-button" _="on click toggle .show-form on #context-settings-form end on click set the #context-settings-form.innerHTML to '' end" hx-target="#context-main" hx-post="/default-home"><span>Close</span></button>
+        <h2>ConText Settings</h2>
         <label for="selected-corpus">Selected Corpus:</label>
         <select id="selected-corpus" name="selected_corpus" hx-trigger="load, change" hx-post="/corpus-select"></select>
             

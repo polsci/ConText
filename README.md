@@ -58,17 +58,20 @@ flask --app context run --debug
 
 ## TODO:
 
-- [ ] ngram position changes when order changes
-- [ ] paging
-- [ ] conc - skip punctuation option in concordances
-- [ ] links in collocation report --> conc: contextual restriction for concordances
+- [x] paging
+- Conc interactions:
+    - [x] ngram position changes when order changes --> conc: ngram position around node
+    - [ ] conc - skip punctuation option in concordances
+    - [ ] links in collocation report --> conc: contextual restriction for concordances with +
 - [ ] show settings on load if corpus not set - ideally load dir
-- [ ] set good defaults for various reports
 - [ ] handle escaping
-- [ ] check various inputs - 'mr.'
+- [ ] check various inputs - 'mr.' error on brown
+- Finishing touches:
+    - [ ] review good defaults for various reports
 
-### Low priority (after release)
+### Lower priority (after release)
 
+- improve styling of reports - e.g. concordance - keep left and right proportions equal and node centralised (so if nothing on left or right looks ok)
 - json settings file for context to preserve state between loads
 - update html title on url changes
 - loading indicator via hx-indicator
@@ -77,3 +80,4 @@ flask --app context run --debug
 - preferences (e.g. when expand reference corpus - remember that across session and store in json)
 - highlighty interface
 - add ngram frequencies
+- make concordance plot lines clickable to text view
