@@ -15,6 +15,7 @@ save_path = '/home/geoff/data/conc-test-corpora/'
 global corpus
 global reference_corpus
 global conc
+global page_size
 
 corpus = Corpus().load(f'{save_path}reuters.corpus')
 reference_corpus = Corpus().load(f'{save_path}brown.corpus')
@@ -23,6 +24,7 @@ current_corpus_path = corpus.corpus_path
 current_reference_corpus_path = reference_corpus.corpus_path
 current_order = '1R2R3R'
 conc.set_reference_corpus(reference_corpus)
+page_size = 20
 
 def _get_nav(context_type, pane = 'context-right', reports = [], page = None, max_page = None):
     current_path = request.path
@@ -82,21 +84,6 @@ def _get_default():
 def _get_query(search, order):
     return render_template("context-query.html", search_url = url_for('form_search', search = search), concordance_url = url_for('concordance', search=search, order=order, page = 1), clusters_url = url_for('clusters', search=search, order=order, page = 1))
 
-# def _get_query_html(search_string, order_string):
-#     context_left = '<h2>Clusters</h2>' + conc.ngrams(search_string, ngram_length = None).to_html() 
-#     context_right = '<h2>Concordance</h2>'
-    
-#     context_right += f'<button id="context-chart-button" hx-target="#context-right" hx-post="/concordanceplot/{search_string}/{order_string}"><span>Concordance Plot</span></button>'
-#     context_right += conc.concordance(search_string, context_length = 20, order = order_string).to_html()
-#     context_full = ''
-#     return render_template("context.html", 
-#                                context_left=context_left, 
-#                                context_right=context_right, 
-#                                context_full=context_full,
-#                                context_data_title=f'ConText : {search_string} ({order_string})'
-#                                )
-
-
 @app.route("/")
 def home():
     search_string = ''
@@ -112,6 +99,13 @@ def default_home():
     response.headers['HX-Replace-Url'] = response_url
     response.headers['HX-Push-Url'] = response_url
     return response
+
+@app.route('/small-screen', methods=['POST'])
+def small_screen():
+    global page_size
+    page_size = 10
+    return ''
+
 
 @app.route('/corpus-info', methods=['POST'])
 def corpus_info_redirect():
@@ -129,7 +123,7 @@ def keywords_redirect():
 
 @app.route('/keywords/<corpus_slug>/<reference_corpus_slug>/<page>')
 def keywords(corpus_slug, reference_corpus_slug, page = 1):
-    result = conc.keywords(min_document_frequency = 5, min_document_frequency_reference = 5, show_document_frequency = True, page_current = int(page))
+    result = conc.keywords(min_document_frequency = 5, min_document_frequency_reference = 5, show_document_frequency = True, page_current = int(page), page_size = page_size)
     result.df = result.df.with_columns(
         pl.concat_str(pl.lit('<span class="context-clickable" hx-target="#context-main" hx-get="/query-context/'), result.df.select(pl.col('token')).to_series(), pl.lit('/'), pl.lit(current_order), pl.lit('">'), result.df.select(pl.col('token')).to_series(), pl.lit('</span>')).alias('token'),
     )
@@ -139,7 +133,7 @@ def keywords(corpus_slug, reference_corpus_slug, page = 1):
 
 @app.route('/frequencies/<corpus_slug>/<reference_corpus_slug>/<page>')
 def frequencies(corpus_slug, reference_corpus_slug, page = 1):
-    result = conc.frequencies(show_document_frequency = True, page_current = int(page))
+    result = conc.frequencies(show_document_frequency = True, page_current = int(page), page_size = page_size)
     result.df = result.df.collect()
     result.df = result.df.with_columns(
         pl.concat_str(pl.lit('<span class="context-clickable" hx-target="#context-main" hx-get="/query-context/'), result.df.select(pl.col('token')).to_series(), pl.lit('/'), pl.lit(current_order), pl.lit('">'), result.df.select(pl.col('token')).to_series(), pl.lit('</span>')).alias('token'),
@@ -158,7 +152,7 @@ def text(search, order, doc_id, start_index, end_index):
 
 @app.route('/collocates/<search>/<order>/<page>')
 def collocates(search, order, page = 1):
-    result = conc.collocates(search, page_current = int(page))
+    result = conc.collocates(search, page_current = int(page), page_size = page_size)
     nav = _get_nav('collocates', pane = 'context-left', reports = ['clusters'], page = page, max_page = _get_max_page(result))
     title = '<h2>Collocates</h2>'
     return nav + title +  result.to_html()
@@ -171,7 +165,7 @@ def clusters(search, order, page = 1):
         ngram_token_position = 'LEFT'
     else:
         ngram_token_position = 'MIDDLE'
-    result = conc.ngrams(search, ngram_length = None, ngram_token_position = ngram_token_position, page_current = int(page))
+    result = conc.ngrams(search, ngram_length = None, ngram_token_position = ngram_token_position, page_current = int(page), page_size = page_size)
     result.df = result.df.with_columns(
         pl.concat_str(pl.lit('<span class="context-clickable" hx-target="#context-main" hx-get="/query-context/'), result.df.select(pl.col('ngram')).to_series(), pl.lit('/'), pl.lit(order), pl.lit('">'), result.df.select(pl.col('ngram')).to_series(), pl.lit('</span>')).alias('ngram'),
     )
@@ -183,7 +177,7 @@ def clusters(search, order, page = 1):
 def concordance(search, order, page = 1):
     token_sequence, index_id = corpus.tokenize(search, simple_indexing=True)
     sequence_len = len(token_sequence[0])
-    result = conc.concordance(search, context_length = 20, order = order, show_all_columns = True, page_current = int(page), ignore_punctuation=True)
+    result = conc.concordance(search, context_length = 20, order = order, show_all_columns = True, page_current = int(page), ignore_punctuation=True, page_size = page_size)
     if result.df.is_empty():
         return f'<h2>No concordance results {search}</h2>'
     result.df = result.df.with_columns(

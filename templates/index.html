@@ -11,8 +11,6 @@
 </head>
 <body>
     <!--
-    _="on load put '{{ search }}' into my value"
-    
     -->
     <header id="context-header">
         <h1 id="context-title" hx-post="/default-home" hx-target="#context-main">
@@ -65,7 +63,24 @@
         if event.key is "F2"
             halt the event
             call #form-search.focus()
+            call #form-search.select()
+        end
+    end
+
+    on load or smallscreenresize from body
+        if window.innerHeight < 800 and not @posted
+            then call htmx.ajax('POST', '/small-screen',  {swap: 'none'})
+                 set @posted to true
+        end
+    end
+    
     </script>
+
+<script>
+window.addEventListener('resize', function() {
+  document.body.dispatchEvent(new Event('smallscreenresize'));
+});
+</script>
 
 </body>
 </html>

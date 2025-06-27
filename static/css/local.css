@@ -393,6 +393,13 @@ background:url('/static/images/chevron-start-outline.svg') no-repeat top left!im
 background:url('/static/images/chevron-end-outline.svg') no-repeat top left!important;
 }
 
+@media (max-width: 1400px) {
+#context-left .context-start-button, #context-left .context-end-button {
+display:none!important;
+}
+}
+
+
 .disabled {
   cursor:auto;
   opacity:0.25;
@@ -480,43 +487,6 @@ width:3.5em;
   margin-right:0.5em;
 }
 
-#table-concordance table {
-width:100%;
-table-layout: fixed;
-}
-
-#table-concordance td, #table-concordance th {
-white-space: nowrap;
-overflow: hidden;
-}
-
-#table-concordance .context-0, #table-concordance .context-2 {
-width:10%;
-max-width:10%;
-text-overflow:ellipsis;
-}
-
-#table-concordance .context-1, #table-concordance .context-3 {
-width:40%;
-max-width:40%;
-}
-
-#table-concordance .context-3 {
-text-overflow:ellipsis;
-}
-
-#table-concordance .context-1 {
-text-align:right!important;
-}
-
-#table-concordance .context-1 div {
-display:inline-block;
-float:right;
-text-align:right;
-white-space: nowrap;
-overflow: visible;
-width:auto;
-} 
 
 #text-todos {
 margin-top:800px;
@@ -571,6 +541,8 @@ button span {
 
 /* Larger than Desktop HD */
 @media (min-width: 1200px) {}
+
+/* start table css */
 
 .gt_table {width:100%!important;}
 .gt_heading {display:none;}
@@ -629,6 +601,99 @@ tr > .gt_row.gt_left {
   border-bottom-width:2px!important;
   border-bottom-style:solid!important;
 }
+
+.is-query-context .gt_table {
+width:100%!important;
+table-layout:fixed;
+}
+
+.is-query-context .gt_table thead th:nth-child(1) {
+width:5%!important;
+}
+
+.is-query-context .gt_table thead th:nth-child(3) {
+width:10%!important;
+}
+
+.is-query-context .gt_table thead th:nth-child(2), .is-query-context .gt_table thead th:nth-child(4) {
+width:42.5%!important;
+}
+
+.is-query-context .gt_table tbody td:nth-child(1) {
+width:5%!important;
+}
+
+.is-query-context .gt_table tbody td:nth-child(2) {
+white-space: nowrap!important;
+text-overflow:ellipsis!important;
+direction:rtl!important;
+overflow:hidden;
+width:42.5%!important;
+}
+
+
+
+.is-query-context .gt_table tbody td:nth-child(3) {
+width:10%!important;
+white-space: nowrap!important;
+text-overflow: ellipsis!important;
+overflow:hidden;}
+
+.is-query-context .gt_table tbody td:nth-child(4) {
+white-space: nowrap!important;
+width:42.5%!important;
+text-overflow: ellipsis!important;
+overflow:hidden;
+
+  /*
+white-space: nowrap!important;
+overflow: hidden!important;
+*/
+}
+
+/*
+#table-concordance table {
+width:100%;
+table-layout: fixed;
+}
+
+#table-concordance td, #table-concordance th {
+white-space: nowrap;
+overflow: hidden;
+}
+
+#table-concordance .context-0, #table-concordance .context-2 {
+width:10%;
+max-width:10%;
+text-overflow:ellipsis;
+}
+
+#table-concordance .context-1, #table-concordance .context-3 {
+width:40%;
+max-width:40%;
+}
+
+#table-concordance .context-3 {
+text-overflow:ellipsis;
+}
+
+#table-concordance .context-1 {
+text-align:right!important;
+}
+
+#table-concordance .context-1 div {
+display:inline-block;
+float:right;
+text-align:right;
+white-space: nowrap;
+overflow: visible;
+width:auto;
+} 
+
+*/
+
+/* end table css */
+
 
 #context-reference-corpus-info .gt_table tbody tr:not(:first-child) {
   display: none;
