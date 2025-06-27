@@ -183,7 +183,7 @@ def clusters(search, order, page = 1):
 def concordance(search, order, page = 1):
     token_sequence, index_id = corpus.tokenize(search, simple_indexing=True)
     sequence_len = len(token_sequence[0])
-    result = conc.concordance(search, context_length = 20, order = order, show_all_columns = True, page_current = int(page))
+    result = conc.concordance(search, context_length = 20, order = order, show_all_columns = True, page_current = int(page), ignore_punctuation=True)
     if result.df.is_empty():
         return f'<h2>No concordance results {search}</h2>'
     result.df = result.df.with_columns(
