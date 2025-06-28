@@ -238,11 +238,6 @@ clear: both;
 }
 
 
-#context-header {
-
-
-}
-
 #context-header::after {
   content: "";
   display:table;
@@ -508,10 +503,6 @@ margin-bottom:0;
 */
 
 
-
-.prompt-text {
-}
-
 .show {
   display:block;
 }
@@ -697,7 +688,6 @@ width:44%!important;
 white-space: nowrap!important;
 overflow: hidden!important;
 */
-}
 
 /*
 #table-concordance table {
