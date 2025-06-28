@@ -100,10 +100,13 @@ def default_home():
     response.headers['HX-Push-Url'] = response_url
     return response
 
-@app.route('/small-screen', methods=['POST'])
-def small_screen():
+@app.route('/screen/<size>', methods=['POST'])
+def small_screen(size):
     global page_size
-    page_size = 10
+    if size == 'small':
+        page_size = 10
+    else:
+        page_size = 20
     return ''
 
 

@@ -68,9 +68,12 @@
     end
 
     on load or smallscreenresize from body
-        if window.innerHeight < 800 and not @posted
-            then call htmx.ajax('POST', '/small-screen',  {swap: 'none'})
-                 set @posted to true
+        if window.innerHeight < 950 and @screen != 'small'
+            then call htmx.ajax('POST', '/screen/small',  {swap: 'none'})
+                 set @screen to 'small'
+        else if window.innerHeight >= 950 and @screen != 'large'
+            then call htmx.ajax('POST', '/screen/large',  {swap: 'none'})
+                 set @screen to 'large'
         end
     end
     
