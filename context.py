@@ -145,6 +145,15 @@ def frequencies(corpus_slug, reference_corpus_slug, page = 1):
     title = '<h2>Frequencies</h2>'
     return nav + title + result.to_html()
 
+@app.route('/text-from-concordanceplot/<search>/<order>', methods=['POST'])
+def text_from_concordanceplot(search, order):
+    doc = int(request.form.get('doc'))
+    offset = int(request.form.get('offset'))
+    token_sequence, index_id = corpus.tokenize(search, simple_indexing=True)
+    sequence_len = len(token_sequence[0])
+    start_index = corpus.text(doc).doc_position_to_corpus_position(offset)
+    return redirect(url_for('text', search=search, order=order, doc_id=doc, start_index=start_index, end_index=start_index + sequence_len - 1))
+
 @app.route('/text/<search>/<order>/<doc_id>/<start_index>/<end_index>')
 def text(search, order, doc_id, start_index, end_index):
     doc = corpus.text(int(doc_id))
@@ -169,6 +178,8 @@ def clusters(search, order, page = 1):
     else:
         ngram_token_position = 'MIDDLE'
     result = conc.ngrams(search, ngram_length = None, ngram_token_position = ngram_token_position, page_current = int(page), page_size = page_size)
+    if result.df.is_empty():
+        return f'&nbsp;'
     result.df = result.df.with_columns(
         pl.concat_str(pl.lit('<span class="context-clickable" hx-target="#context-main" hx-get="/query-context/'), result.df.select(pl.col('ngram')).to_series(), pl.lit('/'), pl.lit(order), pl.lit('">'), result.df.select(pl.col('ngram')).to_series(), pl.lit('</span>')).alias('ngram'),
     )
@@ -182,7 +193,7 @@ def concordance(search, order, page = 1):
     sequence_len = len(token_sequence[0])
     result = conc.concordance(search, context_length = 20, order = order, show_all_columns = True, page_current = int(page), ignore_punctuation=True, page_size = page_size)
     if result.df.is_empty():
-        return f'<h2>No concordance results {search}</h2>'
+        return f'<h2>0 results for &quot;{search}&quot;</h2>'
     result.df = result.df.with_columns(
         pl.concat_str(pl.lit('<span class="context-clickable" hx-target="#context-left" hx-get="/text/'), pl.lit(search), pl.lit('/'), pl.lit(order), pl.lit('/'), result.df.select(pl.col('doc_id')).to_series(), pl.lit('/'), result.df.select(pl.col('index')).to_series(), pl.lit('/'), result.df.select(pl.col('index')).to_series() + pl.lit(sequence_len-1), pl.lit('">'), result.df.select(pl.col('node')).to_series(), pl.lit('</span>')).alias('node'),
     )
@@ -197,7 +208,7 @@ def concordanceplot(search, order, page = 1):
     nav = _get_nav('concordanceplot', pane = 'context-right', reports = ['concordance'], page = 1, max_page = None)
     title = '<h2>Concordance Plot</h2>'
     context = conc.concordance_plot(search).to_html()
-    return nav + title + context
+    return render_template("context-concordanceplot.html", nav = nav, title = title, context = context)
 
 @app.route("/query/<search>/<order>")
 def query(search, order):
