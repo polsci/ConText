@@ -1,0 +1,28 @@
+{{ nav | safe }} 
+{{ title | safe }}
+{{ context | safe}}
+
+
+<script type="text/javascript">
+
+document.body.addEventListener('htmx:load', function(event) {
+  event.target.querySelectorAll('.conc-concordance-plot').forEach(function(svg) {
+    svg.onclick = null;
+
+    svg.addEventListener('click', function(e) {
+      let target = e.target;
+      if (target.tagName && target.tagName.toLowerCase() === 'line') {
+        let g = target.closest('g');
+        if (g) {
+            const currentUrl = window.location.href;
+            const newUrl = currentUrl.replace(/\/query\//, '/text-from-concordanceplot/');
+            htmx.ajax('POST', newUrl, {
+                target: '#context-left', values: { doc: g.getAttribute('data-doc'), offset: g.getAttribute('data-offset') }
+            });
+        }
+      }
+    });
+  });
+});
+
+</script>
