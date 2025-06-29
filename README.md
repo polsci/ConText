@@ -62,10 +62,9 @@ flask --app context run --debug
 - Conc interactions:
     - [x] ngram position changes when order changes --> conc: ngram position around node
     - [x] conc - skip punctuation option in concordances
-        - [ ] currently testing - using 500k dataset and very common words
+        - [x] currently testing - using 500k dataset and very common words
 - [ ] show settings on load if corpus not set - ideally load dir
 - [ ] handle escaping
-- [ ] check various inputs - 'mr.' error on brown
 - Finishing touches:
     - [ ] review good defaults for various reports
 
@@ -82,3 +81,4 @@ flask --app context run --debug
 - highlighty interface
 - add ngram frequencies
 - make concordance plot lines clickable to text view
+- investigate issue with tokenisation for word with trailing '.' e.g. mr.
