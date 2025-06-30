@@ -5,15 +5,17 @@ A browser-based concordancer and language analysis application.
 ConText is a new tool allowing you to to analyze corpora through a browser-based interface. Rather than separating out reports views, ConText uses hyperlinks to allow you to navigate connections between keywords, collocates, clusters, and specific texts. ConText is relevant for corpus linguistic analysis, data scientists working with text, and academics who want a knew way to engage with their texts. 
 
 ConText is in active development and is currently released as a Python package. ConText builds on [Conc](https://github.com/polsci/conc), a Python library for corpus analysis. ConText can be used as a graphical user interface to analyse corpora with Conc. More updates, including a video tutorial and installers for different operating systems, are coming soon. I welcome your feedback and I'm keen to help if you have problems. The easiest way to make contact about ConText is to [raise an issue](https://github.com/polsci/ConText/issues/new).
-https://github.com/polsci/ConText/blob/main/assets/01-corpus-keyness-and-info.png?raw=true
+
+This repository builds on work done in 2020 on a Python library, Jupyter Notebook and Dash application for the Mapping LAWS project. This work prototyped a browser-based alternative to desktop applications for corpus analysis. Ideas for this tool originated during my PhD thesis, which developed a browser-based analysis tool around a corpus of parliamentary discourse enabling rapid queries, new forms of analysis and browseable connections between different levels of analysis.  
+
+## Screenshots and features
+
 | | |
 |:-------------------------:|:-------------------------:|
 |<img alt="Initial corpus view, with keywords and corpus information prominent" src="https://github.com/polsci/ConText/blob/main/assets/01-corpus-keyness-and-info.png?raw=true">  Initial corpus view, with keywords and corpus information prominent |  <img alt="Navigate from keywords to token-based view, with Concordance and Clusters" src="https://github.com/polsci/ConText/blob/main/assets/02-from-keywords-to-concordance.png?raw=true"> Navigate from keywords to token-based view, with Concordance and Clusters |
 |<img alt="Multiple views of the data are available" src="https://github.com/polsci/ConText/blob/main/assets/03-switch-views-concordance-plot.png?raw=true">  Multiple views of the data are available |  <img alt="Switching corpora is easy, allowing quick access to different comparisons" src="https://github.com/polsci/ConText/blob/main/assets/04-switch-corpora.png?raw=true"> Switching corpora is easy, allowing quick access to different comparisons|
 |<img alt="Search and re-ordering is alaways accessible" src="https://github.com/polsci/ConText/blob/main/assets/05-searching-for-economy.png?raw=true">  Search and re-ordering is alaways accessible |  <img alt="Switch from clusters to collocates" src="https://github.com/polsci/ConText/blob/main/assets/06-switch-to-view-collocates.png?raw=true"> Switch from clusters to collocates|
 |<img alt="Navigate from concordances and concordance plots to the position within the text" src="https://github.com/polsci/ConText/blob/main/assets/07-navigate-the-texts.png?raw=true">  Navigate from concordances and concordance plots to the position within the text |  <img alt="Click on specific clusters to narrow the view" src="https://github.com/polsci/ConText/blob/main/assets/08-narrow-and-focus.png?raw=true"> Click on specific clusters to narrow the view|
-
-This repository builds on work done in 2020 on a Python library, Jupyter Notebook and Dash application for the Mapping LAWS project. This work prototyped a browser-based alternative to desktop applications for corpus analysis. Ideas for this tool originated during my PhD thesis, which developed a browser-based analysis tool around a corpus of parliamentary discourse enabling rapid queries, new forms of analysis and browseable connections between different levels of analysis.  
 
 ## Acknowledgements
 
