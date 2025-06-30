@@ -13,6 +13,11 @@
 
 - pyinstaller
 - twine
+- build
+
+## Build
+
+python -m build
 
 ## Software libraries used
 
