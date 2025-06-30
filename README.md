@@ -21,7 +21,7 @@ This repository builds on work done in 2020 on a Python library, Jupyter Noteboo
 
 Conc is developed by [Dr Geoff Ford](https://geoffford.nz/).
 
-Work to create this Python library has been made possible by
+Work to create ConText has been made possible by
 funding/support from:
 
 - “Mapping LAWS: Issue Mapping and Analyzing the Lethal Autonomous
@@ -39,6 +39,8 @@ Dr Ford is a researcher with [Te Pokapū Aronui ā-Matihiko \| UC Arts
 Digital Lab (ADL)](https://artsdigitallab.canterbury.ac.nz/). Thanks to
 the ADL team and the ongoing support of the University of Canterbury’s
 Faculty of Arts who make work like this possible.
+
+Above all, thanks to my family for their love, patience and kindness.
 
 ## Design principles
 
