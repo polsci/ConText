@@ -97,7 +97,6 @@ def _get_max_page(result):
     else:
         return int(paging_descriptor[0].split(' ')[-1])
 
-
 def _get_default():
     corpus_info = render_template("corpus-info.html", title = 'Corpus Information', table = corpus.report().to_html(), reference_corpus_title = 'Reference Corpus', reference_corpus_table = reference_corpus.report().to_html())
     return render_template("context-default.html", corpus_slug = corpus.slug, reference_corpus_slug = reference_corpus.slug, corpus_info = corpus_info)
@@ -260,6 +259,8 @@ def concordanceplot(search, order, page = 1):
 
 @app.route("/query/<search>/<order>")
 def query(search, order):
+    if corpus is None or reference_corpus is None:
+        return redirect(url_for('home'))
     global current_order
     search = clean(search)
     order = clean(order)
@@ -382,7 +383,9 @@ def corpus_select():
         response.headers['HX-Trigger'] = 'newCorpus'
     return response
 
-if __name__ == '__main__':
+def main():
+    global corpora_path
+
     parser = argparse.ArgumentParser(description='Run ConText.')
     parser.add_argument('--port', type=int, default=5000, help='Port to run the server on (ignored in production mode, defaults to 5000 in development mode)')
     parser.add_argument('--corpora', type=str, default='./', help='Path to find corpora')
@@ -400,3 +403,6 @@ if __name__ == '__main__':
         app.run(debug=True, use_reloader=True, port=args.port)
     else:
         FlaskUI(app=app, server="flask", fullscreen=True).run()
+
+if __name__ == '__main__':
+    main()
