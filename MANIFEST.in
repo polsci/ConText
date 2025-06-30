@@ -1,2 +1,2 @@
-recursive-include getcontext/templates *
-recursive-include getcontext/static *
+recursive-include contextapp/templates *
+recursive-include contextapp/static *

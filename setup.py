@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-with open("getcontext/__init__.py") as f:
+with open("contextapp/__init__.py") as f:
     for line in f:
         if line.startswith("__version__"):
             exec(line)
@@ -9,7 +9,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="getcontext",
+    name="contextapp",
     version=__version__,
     description="A browser-based concordancer and language analysis application. ",
     long_description=long_description,
@@ -29,7 +29,7 @@ setup(
     python_requires=">=3.11",
     entry_points={
         "console_scripts": [
-            "ConText = getcontext.context:main"
+            "ConText = contextapp.context:main"
         ]
     },
     classifiers=[

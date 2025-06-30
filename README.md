@@ -43,12 +43,12 @@ The software prioritises speed through pre-processing via [Conc](https://github.
 
 ConText launches a web interface. You will need Chromium (or Chrome) installed.  
 
-ConText is currently [released as a pip-installable package](https://pypi.org/project/getcontext/). Other installation methods are coming soon.  
+ConText is currently [released as a pip-installable package](https://pypi.org/project/contextapp/). Other installation methods are coming soon.  
 
 To install via pip, setup a new Python 3.11+ environment and run the following command:  
 
 ```bash
-pip install getcontext
+pip install contextapp
 ```
 
 ConText/Conc requires installation of a Spacy model. For example, for English:  
