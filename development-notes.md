@@ -13,3 +13,14 @@
 
 - pyinstaller
 - twine
+
+## Software libraries used
+
+* Conc
+* Flask
+* htmx
+* hyperscript
+
+## TODO
+
+- investigate issue with tokenisation for word with trailing '.' e.g. mr.
