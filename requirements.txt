@@ -1,3 +1,5 @@
 conc
 Flask
-httpx
+Flask-WTF
+nh3
+flaskwebgui
