@@ -1,0 +1,2 @@
+recursive-include getcontext/templates *
+recursive-include getcontext/static *
