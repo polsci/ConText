@@ -52,25 +52,14 @@ flask --app context run --debug
 
 ## Credit
 
-- Prototype styling is based on Dash stylsheet
-- Icons are via https://ionic.io/ionicons
-- logo is based on apps-outline
+- Prototype styling is based on a Plotly Dash Stylesheet (MIT License)
+- Icons are via [Ionicons](https://ionic.io/ionicons)
 
-## TODO:
+### Coming soon
 
-- [x] paging
-- Conc interactions:
-    - [x] ngram position changes when order changes --> conc: ngram position around node
-    - [x] conc - skip punctuation option in concordances
-        - [x] currently testing - using 500k dataset and very common words
-- [ ] show settings on load if corpus not set - ideally load dir
-- [ ] handle escaping
-- Finishing touches:
-    - [ ] review good defaults for various reports
-
-### Lower priority (after release)
-
+- review defaults for various reports
 - links in collocation report --> conc: contextual restriction for concordances with +
+- updates of corpus/reference corpus will only refresh current page to allow comparing token-level results between corpora
 - improve styling of reports - e.g. concordance - keep left and right proportions equal and node centralised (so if nothing on left or right looks ok)
 - json settings file for context to preserve state between loads
 - update html title on url changes
@@ -82,3 +71,12 @@ flask --app context run --debug
 - add ngram frequencies
 - make concordance plot lines clickable to text view
 - investigate issue with tokenisation for word with trailing '.' e.g. mr.
+
+## Note on development: build binary for Linux using PyInstaller
+
+- for building install pyinstaller
+
+    pip install pyinstaller
+    pyinstaller -w -F -n ConText --collect-all scipy --collect-all faicons  --copy-metadata great_tables --collect-all great_tables --add-data "templates:templates" --add-data "static:static" --exclude-module jupyterlab --hidden-import en_core_web_sm --collect-all en_core_web_sm context.py
+
+- Note: this requires Chromium
