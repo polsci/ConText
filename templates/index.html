@@ -9,9 +9,8 @@
   <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
 </style>
 </head>
-<body>
-    <!--
-    -->
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'>
+
     <header id="context-header">
         <h1 id="context-title" hx-post="/default-home" hx-target="#context-main">
             <a href="/" hx-post="/default-home" hx-target="#context-main">ConText</a>
@@ -20,6 +19,7 @@
         </div>
         <div id="context-search-form" class="">
             <form id="search-form" hx-post="/query-context" hx-target="#context-main" hx-swap="innerHTML" hx-trigger="submit">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="text" id="form-search" name="search" placeholder="Enter search term" required>
                 <select id="form-order" name="order" _="on change trigger submit on #search-form
                                                            on load put '{{ order }}' into my value">
