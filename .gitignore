@@ -3,3 +3,5 @@ __pycache__/
 *.spec
 .context
 *.egg-info
+build/
+dist/
