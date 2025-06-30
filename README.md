@@ -4,8 +4,6 @@ A browser-based concordancer and language analysis application.
 
 This repository builds on work done in 2020 on a Python library, Jupyter Notebook and Dash application for the Mapping LAWS project. This work prototyped a browser-based alternative to desktop applications for corpus analysis. Ideas for this tool originated during my PhD thesis, which developed a browser-based analysis tool around a corpus of parliamentary discourse enabling rapid queries, new forms of analysis and browseable connections between different levels of analysis.  
 
-![Screenshot of original working Dash prototype of ConText](assets/context-dash-with-text.png)  
-
 ConText builds on [Conc](https://github.com/polsci/conc), a Python library for corpus analysis.  
 
 ## Acknowledgements
