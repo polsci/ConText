@@ -43,16 +43,14 @@ The software prioritises speed through pre-processing via [Conc](https://github.
 
 ## Installation
 
-This first release of the software can be installed by setting up a Python 3.11+ environment, cloning this repository and installing with:
+ConText launches a web interface. You will need Chromium (or Chrome) installed.  
+
+ConText is currently [released as a pip-installable package](https://pypi.org/project/getcontext/). Other installation methods are coming soon.  
+
+To install via pip, setup a new Python 3.11+ environment and run the following command:  
 
 ```bash
-pip install .
-```
-
-Currently the development version of Conc is required: 
-
-```bash
-pip install git+https://github.com/polsci/conc.git
+pip install getcontext
 ```
 
 ConText/Conc requires installation of a Spacy model. For example, for English:  
@@ -61,26 +59,27 @@ ConText/Conc requires installation of a Spacy model. For example, for English:
 python -m spacy download en_core_web_sm
 ```
 
-Notes: 
-- Conc installs the Polars library. If you are using an older pre-2013 machines, you will need to install Polars without optimisations for modern CPUs. Notes on this are available in the [Conc installation documentation](https://geoffford.nz/conc/tutorials/install.html#pre-2013-cpu-install-polars-with-support-for-older-machines).  
+Notes: Conc installs the Polars library. If you are using an older pre-2013 machines, you will need to install Polars without optimisations for modern CPUs. Notes on this are available in the [Conc installation documentation](https://geoffford.nz/conc/tutorials/install.html#pre-2013-cpu-install-polars-with-support-for-older-machines).  
 
 ## Using ConText
 
-Currently you should [build your corpora using Conc](https://geoffford.nz/conc/tutorials/recipes.html). You should have a corpus and reference corpus. Conc provides [sample corpora to download and build](https://geoffford.nz/conc/api/corpora.html#build-sample-corpora). To allow ConText to find them when it starts up store the created corpora in the same parent directory. 
+To use ConText currently you need to [build your corpora using Conc from text files or CSV sources](https://geoffford.nz/conc/tutorials/recipes.html). You should have a corpus and reference corpus. Conc provides [sample corpora to download and build](https://geoffford.nz/conc/api/corpora.html#build-sample-corpora).  
 
-You will need Chromium or Chrome installed. 
+To allow ConText to find them when it starts up store the created corpora in the same parent directory.  
 
-Run ConText like this ...
+Run ConText like this ...  
 
 ```bash
 ConText --corpora /path/to/directory/with/processed/corpora/
 ```
 
-To run the application in debug mode (relevant for development or diagnosing problems), use the following command:  
+To run the application in debug mode (relevant for development or diagnosing problems), use the following command:   
 
 ```bash
 ConText --corpora /path/to/directory/with/processed/corpora/ --mode development
 ```
+
+A video tutorial on how to use ConText is coming soon.  
 
 ## Credit
 
