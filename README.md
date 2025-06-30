@@ -4,7 +4,7 @@ A browser-based concordancer and language analysis application.
 
 ConText is a new tool allowing you to to analyze corpora through a browser-based interface. Rather than separating out reports views, ConText uses hyperlinks to allow you to navigate connections between keywords, collocates, clusters, and specific texts. ConText is relevant for corpus linguistic analysis, data scientists working with text, and academics who want a knew way to engage with their texts. 
 
-ConText is in active development and is currently released as a Python package. ConText builds on [Conc](https://github.com/polsci/conc), a Python library for corpus analysis. More updates, including a video tutorial and installers for different operating systems, are coming soon. I welcome your feedback and I'm keen to help if you have problems. The easiest way to make contact about ConText is to [raise an issue](https://github.com/polsci/ConText/issues/new).
+ConText is in active development and is currently released as a Python package. ConText builds on [Conc](https://github.com/polsci/conc), a Python library for corpus analysis. ConText can be used as a graphical user interface to analyse corpora with Conc. More updates, including a video tutorial and installers for different operating systems, are coming soon. I welcome your feedback and I'm keen to help if you have problems. The easiest way to make contact about ConText is to [raise an issue](https://github.com/polsci/ConText/issues/new).
 
 | | |
 |:-------------------------:|:-------------------------:|
