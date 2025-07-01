@@ -22,8 +22,6 @@ with open(secret_file) as f:
 
 csrf = CSRFProtect(app)
 
-# corpora_path = '/home/geoff/data/conc-test-corpora/'
-
 global corpora_path
 global corpus
 global reference_corpus
@@ -35,13 +33,7 @@ reference_corpus = None
 conc = None
 current_corpus_path = None
 current_reference_corpus_path = None
-#corpus = Corpus().load(f'{corpora_path}reuters.corpus')
-#reference_corpus = Corpus().load(f'{corpora_path}brown.corpus')
-# conc = Conc(corpus)
-# current_corpus_path = corpus.corpus_path
-# current_reference_corpus_path = reference_corpus.corpus_path
 current_order = '1R2R3R'
-# conc.set_reference_corpus(reference_corpus)
 page_size = 20
 
 def clean(user_input):
