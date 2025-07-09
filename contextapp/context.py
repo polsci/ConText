@@ -1,4 +1,5 @@
 from conc.corpus import Corpus
+from conc.listcorpus import ListCorpus
 from conc.conc import Conc
 from conc.corpora import list_corpora
 from conc.core import set_logger_state
@@ -339,14 +340,17 @@ def corpus_select():
     global current_reference_corpus_path
 
     corpora = list_corpora(corpora_path)
+    corpora = corpora.sort('name')
+
     corpus_filenames = corpora.get_column('corpus').to_list()
     corpus_names = corpora.get_column('name').to_list()
+    corpus_formats = corpora.get_column('format').to_list()
     trigger_new_corpus = False
     if request.url_rule.rule == '/corpus-select':
         if 'selected_corpus' in request.form:
             corpus_filename = clean(request.form.get('selected_corpus'))
             if corpus_filename and corpus_filename in corpus_filenames and corpus_filename != current_corpus_path:
-                corpus = Corpus().load(f'{corpora_path}{corpus_filename}')
+                corpus = Corpus().load(os.path.join(corpora_path, corpus_filename))
                 conc = Conc(corpus)
                 if conc is not None and reference_corpus is not None:
                     conc.set_reference_corpus(reference_corpus) # if new conc created, need to reset reference corpus
@@ -356,20 +360,31 @@ def corpus_select():
         if 'selected_reference_corpus' in request.form:
             reference_corpus_filename = clean(request.form.get('selected_reference_corpus'))
             if reference_corpus_filename and reference_corpus_filename in corpus_filenames and reference_corpus_filename != current_reference_corpus_path:
-                reference_corpus = Corpus().load(f'{corpora_path}{reference_corpus_filename}')
+                if corpus_formats[corpus_filenames.index(reference_corpus_filename)] == 'List Corpus':
+                    reference_corpus = ListCorpus().load(os.path.join(corpora_path, reference_corpus_filename))
+                else:
+                    reference_corpus = Corpus().load(os.path.join(corpora_path, reference_corpus_filename))
                 if conc is not None:
                     conc.set_reference_corpus(reference_corpus)
                 current_reference_corpus_path = reference_corpus.corpus_path
                 trigger_new_corpus = True
     options = []
     options.append('<option value=""> - </option>')
-    for corpus_filename, corpus_name in zip(corpus_filenames, corpus_names):
-        if request.url_rule.rule == '/corpus-select' and corpus is not None and corpus_name == corpus.name:
+    for corpus_filename, corpus_name, corpus_format in zip(corpus_filenames, corpus_names, corpus_formats):
+        if request.url_rule.rule == '/corpus-select' and corpus is not None and corpus_filename == os.path.basename(corpus.corpus_path):
             options.append(f'<option value="{corpus_filename}" selected>{corpus_name}</option>')
-        elif request.url_rule.rule == '/reference-corpus-select' and reference_corpus is not None and corpus_name == reference_corpus.name:
-            options.append(f'<option value="{corpus_filename}" selected>{corpus_name}</option>')
+        elif request.url_rule.rule == '/reference-corpus-select' and reference_corpus is not None and corpus_filename == os.path.basename(reference_corpus.corpus_path):
+            if corpus_format == 'List Corpus':
+                options.append(f'<option value="{corpus_filename}" selected>{corpus_name} (List Corpus)</option>')
+            else:
+                options.append(f'<option value="{corpus_filename}" selected>{corpus_name}</option>')
         else:
-            options.append(f'<option value="{corpus_filename}">{corpus_name}</option>')
+            if request.url_rule.rule == '/corpus-select' and corpus_format == 'Corpus':
+                options.append(f'<option value="{corpus_filename}">{corpus_name}</option>')
+            elif request.url_rule.rule == '/reference-corpus-select' and corpus_format == 'Corpus':
+                options.append(f'<option value="{corpus_filename}">{corpus_name}</option>')
+            elif request.url_rule.rule == '/reference-corpus-select' and corpus_format == 'List Corpus':
+                options.append(f'<option value="{corpus_filename}">{corpus_name} (List Corpus)</option>')
     response = make_response('\n'.join(options))
     if trigger_new_corpus:
         response.headers['HX-Trigger'] = 'newCorpus'
@@ -387,6 +402,13 @@ def main():
     corpora_path = args.corpora
     if not os.path.exists(corpora_path):
         print(f"Corpora path '{corpora_path}' does not exist. Please provide a valid path.")
+        exit(1)
+
+    corpora = list_corpora(corpora_path)
+    if corpora.select(pl.len()).item() == 0:
+        print("No corpora found in the specified path. Please add some corpora to the path or specify another path.")
+        if corpora_path == './':
+            print("Corpora path is './', which is the default. Use the --corpora argument to specify the directory containing the corpora, call Context like this: ConText --corpora /path/to/corpora")
         exit(1)
 
     if args.mode == 'development':
