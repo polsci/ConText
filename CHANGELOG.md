@@ -3,6 +3,16 @@
 This document is based on https://keepachangelog.com/en/1.1.0/ and classifies changes as
 Added, Changed, Deprecated, Removed, Fixed, or Security
 
+## [0.1.2] - 2025-07-09 - Support for Conc list corpus format
+
+## Added
+
+- support for Conc list corpus format as reference corpus
+
+## Changed
+
+- improved color for text highlight
+
 ## [0.1.1] - 2025-07-01 - Update docs, footer links
 
 ### Changed
