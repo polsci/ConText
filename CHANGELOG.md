@@ -3,6 +3,17 @@
 This document is based on https://keepachangelog.com/en/1.1.0/ and classifies changes as
 Added, Changed, Deprecated, Removed, Fixed, or Security
 
+## [0.1.4] - 2025-07-23 - adding DOI via Zenodo
+
+## Added
+
+- Zenodo DOI badge to README
+- Github release badge to README
+
+## Changed
+
+- updated citation with DOI and version
+
 ## [0.1.3] - 2025-07-23 - initiating Zenodo integration
 
 This version is the first released via Github releases. Previous releases were via Pypi only. Github 
