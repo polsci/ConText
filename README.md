@@ -1,6 +1,6 @@
 # ConText
 
-A browser-based concordancer and language analysis application.  
+A browser-based concordancer and discourse analysis application.  
 
 ConText is a new tool allowing you to to analyze corpora through a browser-based interface. Rather than separating out reports views, ConText uses hyperlinks to allow you to navigate connections between keywords, collocates, clusters, and specific texts. ConText is relevant for corpus linguistic analysis, data scientists working with text, and academics who want a knew way to engage with their texts. 
 
