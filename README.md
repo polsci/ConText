@@ -26,7 +26,7 @@ Conc is developed by [Dr Geoff Ford](https://geoffford.nz/).
 Work to create ConText has been made possible by
 funding/support from:
 
-- “Mapping LAWS: Issue Mapping and Analyzing the Lethal Autonomous
+- “[Mapping LAWS](https://mappinglaws.net/): Issue Mapping and Analyzing the Lethal Autonomous
   Weapons Debate” (Royal Society of New Zealand’s Marsden Fund Grant
   19-UOC-068)  
 - “Into the Deep: Analysing the Actors and Controversies Driving the
@@ -34,13 +34,13 @@ funding/support from:
   Society of New Zealand’s Marsden Fund Grant 22-UOC-059)
 - Sabbatical, University of Canterbury, Semester 1 2025.
 
-Thanks to the Mapping LAWS project team for their support and feedback
-as first users of ConText.
+Thanks to Jeremy Moses and Sian Troath from the [Mapping LAWS](https://mappinglaws.net/) project 
+team for their support and feedback as first users of ConText.
 
 Dr Ford is a researcher with [Te Pokapū Aronui ā-Matihiko \| UC Arts
 Digital Lab (ADL)](https://artsdigitallab.canterbury.ac.nz/). Thanks to
 the ADL team and the ongoing support of the University of Canterbury’s
-Faculty of Arts who make work like this possible.
+Faculty of Arts who make work like this possible.  
 
 Above all, thanks to my family for their love, patience and kindness.
 
@@ -60,11 +60,11 @@ The frontend uses web technologies to make different views of the corpus availab
 
 ## Installation
 
-ConText launches a web interface. You will need Chromium (or Chrome) installed.  
+ConText launches a web browser in "app mode". You will need Chromium (or Chrome) installed with the current version.  
 
 ConText is currently [released as a pip-installable package](https://pypi.org/project/contextapp/). Other installation methods are coming soon.  
 
-To install via pip, setup a new Python 3.11+ environment and run the following command:  
+To install via pip, [setup a new Python 3.11+ environment](https://github.com/polsci/ConText/blob/main/installation.md#python-setup) and run the following command:  
 
 ```bash
 pip install contextapp
@@ -76,7 +76,7 @@ ConText/Conc requires installation of a Spacy model. For example, for English:
 python -m spacy download en_core_web_sm
 ```
 
-Notes: Conc installs the Polars library. If you are using an older pre-2013 machines, you will need to install Polars without optimisations for modern CPUs. Notes on this are available in the [Conc installation documentation](https://geoffford.nz/conc/tutorials/install.html#pre-2013-cpu-install-polars-with-support-for-older-machines).  
+Note: check out additional [installation notes](https://github.com/polsci/ConText/blob/main/installation.md) if you want information on setting up Python, if you are using an older machine (pre-2013), or if you are using Windows Subsystem for Linux (WSL).
 
 ## Using ConText
 
