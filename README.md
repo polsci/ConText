@@ -6,7 +6,7 @@ ConText is a new tool allowing you to to analyze corpora through a browser-based
 
 ConText is in active development and is currently released as a Python package. ConText builds on [Conc](https://github.com/polsci/conc), a Python library for corpus analysis. ConText can be used as a graphical user interface to analyse corpora with Conc. More updates, including a video tutorial and installers for different operating systems, are coming soon. I welcome your feedback and I'm keen to help if you have problems. The easiest way to make contact about ConText is to [raise an issue](https://github.com/polsci/ConText/issues/new).
 
-This repository builds on work done in 2020 on a Python library, Jupyter Notebook and Dash application for the Mapping LAWS project. This work prototyped a browser-based alternative to desktop applications for corpus analysis. Ideas for this tool originated during my PhD thesis, which developed a browser-based analysis tool around a corpus of parliamentary discourse enabling rapid queries, new forms of analysis and browseable connections between different levels of analysis.  
+This repository builds on work done in 2020 on a Python library, Jupyter Notebook and Dash application for the Mapping LAWS project. This work prototyped a browser-based alternative to desktop applications for corpus analysis. Ideas for this tool originated during my PhD thesis, which developed a browser-based analysis tool around a corpus of parliamentary discourse enabling rapid queries, new forms of analysis and browseable connections between different levels of analysis. ConText, in the form released, has been rewritten from the ground up, using Flask, flaskwebgui, HTMX, Hyperscript and [Conc](https://geoffford.nz/conc/). 
 
 ## Screenshots and features
 
