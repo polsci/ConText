@@ -6,6 +6,6 @@ authors:
   orcid: "https://orcid.org/0000-0001-7088-4073"
 title: "ConText: a browser-based concordancer and discourse analysis application"
 version: 0.1.3
-doi: 
+doi: 10.5281/zenodo.16360951
 date-released: 2025-07-23
 url: "https://github.com/polsci/ConText"
