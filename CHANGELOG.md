@@ -3,6 +3,15 @@
 This document is based on https://keepachangelog.com/en/1.1.0/ and classifies changes as
 Added, Changed, Deprecated, Removed, Fixed, or Security
 
+## [0.1.3] - 2025-07-23 - initiating Zenodo integration
+
+This version is the first released via Github releases. Previous releases were via Pypi only. Github 
+releases are tracked automatically by Zenodo. 
+
+## Added
+
+- citation file
+
 ## [0.1.2] - 2025-07-09 - Support for Conc list corpus format
 
 ## Added
