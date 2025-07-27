@@ -3,6 +3,16 @@
 This document is based on https://keepachangelog.com/en/1.1.0/ and classifies changes as
 Added, Changed, Deprecated, Removed, Fixed, or Security
 
+## [0.1.5] - 2025-07-27 - changes to ConText mode
+
+## Added
+
+- app mode
+
+## Changed
+
+- change production mode (default) to server only without debug setup (gui now launched by app mode)
+
 ## [0.1.4] - 2025-07-23 - adding DOI via Zenodo
 
 ## Added
