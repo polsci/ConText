@@ -60,8 +60,6 @@ The frontend uses web technologies to make different views of the corpus availab
 
 ## Installation
 
-ConText launches a web browser in "app mode". You will need Chromium (or Chrome) installed with the current version.  
-
 ConText is currently [released as a pip-installable package](https://pypi.org/project/contextapp/). Other installation methods are coming soon.  
 
 To install via pip, [setup a new Python 3.11+ environment](https://github.com/polsci/ConText/blob/main/installation.md#python-setup) and run the following command:  
@@ -76,7 +74,7 @@ ConText/Conc requires installation of a Spacy model. For example, for English:
 python -m spacy download en_core_web_sm
 ```
 
-Note: check out additional [installation notes](https://github.com/polsci/ConText/blob/main/installation.md) if you want information on setting up Python, if you are using an older machine (pre-2013), or if you are using Windows Subsystem for Linux (WSL).
+Note: check out additional [installation notes](https://github.com/polsci/ConText/blob/main/installation.md) if you want information on setting up Python, setting up ConText for "app" mode, if you are using an older machine (pre-2013), or if you are using Windows Subsystem for Linux (WSL).
 
 ## Using ConText
 
@@ -90,10 +88,16 @@ Run ConText like this ...
 ConText --corpora /path/to/directory/with/processed/corpora/
 ```
 
-To run the application in debug mode (relevant for development or diagnosing problems), use the following command:   
+ConText can be run in different modes:
+
+* "production" mode is the default. This will launch a ConText server. You will see a message to launch a browser and access a specific URL.
+* "app" mode - this launches a web browser in "app mode". You will need a browser installed and a default browser set for your operating system. 
+* "development" mode - this launched ConText as a server with Flask's debug mode enabled. This is intended for development and debugging. 
+
+To set the mode add the --mode argument to the command. For example, to set mode to "app", run ConText with:   
 
 ```bash
-ConText --corpora /path/to/directory/with/processed/corpora/ --mode development
+ConText --corpora /path/to/directory/with/processed/corpora/ --mode app
 ```
 
 A video tutorial on how to use ConText is coming soon.  

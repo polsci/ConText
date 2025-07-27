@@ -394,9 +394,9 @@ def main():
     global corpora_path
 
     parser = argparse.ArgumentParser(description='Run ConText.')
-    parser.add_argument('--port', type=int, default=5000, help='Port to run the server on (ignored in production mode, defaults to 5000 in development mode)')
     parser.add_argument('--corpora', type=str, default='./', help='Path to find corpora')
-    parser.add_argument('--mode', type=str, default='production', help='Mode to run the server (production or development)')
+    parser.add_argument('--mode', type=str, default='production', help='Mode to run ConText (production, app or development)')
+    parser.add_argument('--port', type=int, default=5000, help='Port to run the server on (ignored in app mode, defaults to 5000 in production and development modes)')
     args = parser.parse_args()
 
     corpora_path = args.corpora
@@ -411,12 +411,18 @@ def main():
             print("Corpora path is './', which is the default. Use the --corpora argument to specify the directory containing the corpora, call Context like this: ConText --corpora /path/to/corpora")
         exit(1)
 
-    if args.mode == 'development':
+    if args.mode == 'app':
+        FlaskUI(app=app, server="flask", fullscreen=True).run()
+    else:
+        if args.mode == 'development':
+            debug = True
+            use_reloader = True
+        else:
+            debug = False
+            use_reloader = False
         print(f"Starting server on port {args.port}")
         print(f"Load a browser at http://127.0.0.1:{args.port}/")
-        app.run(debug=True, use_reloader=True, port=args.port)
-    else:
-        FlaskUI(app=app, server="flask", fullscreen=True).run()
+        app.run(debug=debug, use_reloader=use_reloader, port=args.port)
 
 if __name__ == '__main__':
     main()

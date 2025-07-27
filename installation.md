@@ -7,8 +7,6 @@ work to release a more straightforward install method.
 
 ## Installation instructions (Mirrors README text on installation)
 
-ConText launches a web browser in "app mode". You will need Chromium (or Chrome) installed with the current version.  
-
 ConText is currently [released as a pip-installable package](https://pypi.org/project/contextapp/). Other installation methods are coming soon.  
 
 To install via pip, [setup a new Python 3.11+ environment](https://github.com/polsci/ConText/blob/main/installation.md#python-setup) and run the following command:  
@@ -22,6 +20,11 @@ ConText/Conc requires installation of a Spacy model. For example, for English:
 ```bash
 python -m spacy download en_core_web_sm
 ```
+
+## App mode requirements
+
+ConText can be launched in the following modes: "production", "app" and "development". For "app" mode you will need a browser installed and a default 
+browser set for your operating system. See the comment below on setting this up for Windows Subsystem for Linux (WSL).
 
 ## Python Setup
 
